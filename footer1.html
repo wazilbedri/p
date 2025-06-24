@@ -1,6 +1,6 @@
 
 
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 
 /* Changed to position: fixed; bottom: 0; as requested. */
@@ -61,8 +61,8 @@ margin-top: auto;
 
     .footer-mobile .footer {
 padding: 20px;       /* Keep or adjust padding as needed (see note below) */
-background-color: #111;
-color: #fff;
+background-color: #fffcf2;
+color: #0f0f0f;
 /* max-width: 500px; */ /* Remove or comment out this line */
 /* margin: 0 auto; */   /* Remove or comment out this line */
 width: 100%;         /* Explicitly set width to 100% of its containing block */
@@ -72,6 +72,8 @@ box-sizing: border-box; /* Ensures padding is included within the 100% width */
     .footer-mobile .footer-logo {
         text-align: center;
         margin: 20px 0;
+        position: relative;
+        left: 0;
     }
 
     .footer-mobile .footer-logo img {
@@ -87,8 +89,8 @@ position: relative;
 
 .currency-button-unique {
 background: none;
-border: 1px solid #444;
-color: #fff;
+border: 1px solid #1d1d1d;
+color: #000000;
 font-size: 14px;
 padding: 10px 16px;
 cursor: pointer;
@@ -97,7 +99,7 @@ border-radius: 4px;
 
 .currency-dropdown-unique {
 display: none;
-background-color: #111;
+background-color: #000000;
 position: absolute;
 width: 80px;
 max-height: 150px;
@@ -123,14 +125,14 @@ text-align: center;
 }
 
 .currency-dropdown-link-unique {
-color: #fff;
+color: #ffffff;
 text-decoration: none;
 font-size: 12px;
 display: block;
 }
 
 .currency-dropdown-link-unique:hover {
-background-color: #222;
+background-color: #3b3636;
 }
 
 .currency-dropdown-unique::-webkit-scrollbar {
@@ -153,7 +155,7 @@ border-radius: 2px;
     }
 
     .footer-mobile .footer-nav-link {
-        color: #fff;
+        color: #020202;
         text-decoration: none;
         font-size: 14px;
         display: flex;
@@ -181,7 +183,7 @@ border-radius: 2px;
     }
 
     .footer-mobile .social-icons a {
-        color: #ffffff; /* white icons */
+        color: #020202; /* white icons */
         font-size: 20px;
         transition: color 0.3s ease;
         text-decoration: none;
@@ -207,7 +209,7 @@ border-radius: 2px;
     .footer-mobile .newsletter-form {
         display: flex;
         justify-content: space-between;
-        background-color: #fff;
+        background-color: #000000;
         padding: 12px 16px;
         border-radius: 0px; /* Mobile had 0px, desktop form is different */
         max-width: 100%;
@@ -217,19 +219,19 @@ border-radius: 2px;
         border: none;
         flex: 1;
         font-size: 13px;
-        color: #000;
+        color: #e9e9e9;
         outline: none;
         background-color: transparent; /* Ensure input bg is transparent */
     }
 
     .footer-mobile .newsletter-form input[type="email"]::placeholder {
-        color: #666;
+        color: #c4c1c1;
     }
 
     .footer-mobile .newsletter-form button {
         background: none;
         border: none;
-        color: #000;
+        color: #ffffff;
         font-weight: lighter; /* Mobile was lighter */
         font-size: 11px;
         letter-spacing: 0.1rem;
@@ -239,7 +241,7 @@ border-radius: 2px;
         position: relative;
     }
     .footer-mobile .newsletter-success-message { /* Class for styling */
-        color: rgb(229, 235, 229);
+        color: rgb(20, 20, 20);
         margin-top: 10px;
         font-size: 13px;
         margin-top: 30px; /* As per original */
@@ -344,7 +346,7 @@ border-radius: 2px;
         color: #fff;
         padding: 40px 60px;
         /* font-family: 'Arial', sans-serif; */ /* Using body font */
-        font-size: 14px;
+        font-size: 18px;
     }
 
     .footer-desktop .footer-top { /* Target desktop footer top */
@@ -356,6 +358,11 @@ border-radius: 2px;
 
     .footer-desktop .footer-brand .logo {
         height: 30px; /* Desktop logo height */
+        position: relative;
+        left: 45%;
+        right: 0;
+        margin-top: 50px;
+        padding-bottom: 50px;
     }
 
     .footer-desktop .footer-nav-container { /* New container for currency and links */
@@ -567,7 +574,7 @@ border-radius: 2px;
             flex-shrink: 0; /* Prevent logo from shrinking */
         }
         .footer-desktop .footer-nav-container {
-             gap: 20px; /* Smaller gap when horizontal */
+             gap: 59px; /* Smaller gap when horizontal */
         }
 
         .footer-desktop .footer-links.with-divider {
@@ -582,7 +589,7 @@ border-radius: 2px;
             /* flex: 1 1 0%; */ /* This can make columns too wide */
             padding: 0 15px; /* Padding between columns */
             border-left: 1px solid #444; /* Darker divider for dark theme */
-            /* min-width: 120px; */ /* Adjust as needed */
+            min-width: 120px;
             text-align: center; /* Center text in columns */
         }
 
@@ -632,8 +639,8 @@ border-radius: 2px;
 
 <div class="footer-mobile">
     <footer class="footer">
-        <div class="footer-logo">
-          <img src="https://raw.githubusercontent.com/wazilbedri/pay/main/logo.svg" alt="WarmQuote Logo" />
+        <div class="footer-logos">
+          <img src="" alt="" />
         </div>
 
         <div class="currency-container-unique">
@@ -659,11 +666,11 @@ border-radius: 2px;
 
 
         <div class="footer-nav">
-          <a href="https://warmquote.com/pages/about" class="footer-nav-link">About <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowwhite.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/pages/contact" class="footer-nav-link">Contact <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowwhite.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/pages/privacy-policy" class="footer-nav-link">Privacy Policy <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowwhite.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/pages/returns-faq" class="footer-nav-link">Returns & FAQ <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowwhite.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/en-usd/pages/terms-of-service" class="footer-nav-link">Terms of Service <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowwhite.svg" alt="Arrow" /></a>
+          <a href="https://warmquote.com/pages/about" class="footer-nav-link">About <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
+          <a href="https://warmquote.com/pages/contact" class="footer-nav-link">Contact <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
+          <a href="https://warmquote.com/pages/privacy-policy" class="footer-nav-link">Privacy Policy <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
+          <a href="https://warmquote.com/pages/returns-faq" class="footer-nav-link">Returns & FAQ <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
+          <a href="https://warmquote.com/en-usd/pages/terms-of-service" class="footer-nav-link">Terms of Service <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
         </div>
 
         <div class="social-icons">
@@ -694,7 +701,7 @@ border-radius: 2px;
             />
             <div class="visually-hidden" aria-hidden="true"> <input type="text" name="b_cbbfe1d906378ad9ed06537c9_9cf73c7e37" tabindex="-1" value="">
             </div>
-            <button type="submit">SUBSCRIBE</button>
+            <button type="submit">Join</button>
           </form>
 
           <p id="success-message-mobile" class="newsletter-success-message" style="display:none;">
@@ -723,10 +730,11 @@ border-radius: 2px;
 </div>
 
 <div class="footer-desktop">
+    <hr class="divider"/>
     <footer class="footer">
         <div class="footer-top">
             <div class="footer-brand">
-            <img src="https://raw.githubusercontent.com/wazilbedri/pay/main/logo.svg" alt="WarmQuote Logo" class="logo" />
+            <img src="" alt="" class="logos" />
             </div>
 
             <div class="footer-nav-container">
