@@ -1,10 +1,10 @@
 <!-- ============================================================================== -->
-<!-- ======================== NEW FOOTER DESIGN (V4) ============================== -->
+<!-- ============== SELF-CONTAINED MULTI-COLUMN FOOTER DESIGN ===================== -->
 <!-- ============================================================================== -->
 <!-- 
   INSTRUCTIONS:
-  1. This is the new footer design with the working JavaScript from your original file integrated.
-  2. This is a complete, self-contained block. Place it in your footer injection area.
+  1. This version combines the new visual design with the working JavaScript from your original file.
+  2. Place this entire code block into your website's custom FOOTER injection area.
 -->
 
 <!-- Step 1: All necessary CSS for styling and positioning -->
@@ -154,10 +154,10 @@
   }
   
   /* --- Currency Selector Styles from original file --- */
-  .footer-currency-v4 {
+  .currency-container-unique {
     position: relative;
   }
-  .currency-button-v4 {
+  .currency-button-unique {
     border: 1px solid #dcd1c0;
     padding: 8px 12px;
     font-size: 0.9rem;
@@ -165,7 +165,7 @@
     background-color: transparent;
     color: #333;
   }
-  .currency-dropdown-v4 {
+  .currency-dropdown-unique {
     display: none;
     position: absolute;
     bottom: 100%; /* Position above button */
@@ -176,20 +176,24 @@
     z-index: 1000;
     margin-bottom: 5px;
   }
-  .currency-dropdown-v4 ul {
+  .currency-dropdown-unique ul {
     list-style: none;
     margin: 0;
     padding: 5px;
     max-height: 200px;
     overflow-y: auto;
   }
-  .currency-dropdown-v4 li a {
+  .currency-dropdown-unique li {
+    padding: 0;
+    margin: 0;
+  }
+  .currency-dropdown-unique li a {
     display: block;
     padding: 8px 12px;
     color: #333;
     text-decoration: none;
   }
-  .currency-dropdown-v4 li a:hover {
+  .currency-dropdown-unique li a:hover {
       background-color: #f0f0f0;
   }
 
@@ -240,7 +244,7 @@
     .footer-payment-icons-v4 {
         order: 2; 
     }
-    .footer-currency-v4 {
+    .currency-container-unique { /* Changed from .footer-currency-v4 */
         order: 1;
     }
   }
@@ -290,7 +294,7 @@
       <p>
         Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.
       </p>
-      <form id="newsletter-form-v4" class="newsletter-form-v4" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe_v4">
+      <form id="newsletter-form-v4" class="newsletter-form-v4" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe_v4" onsubmit="handleNewsletterSubmit(event, 'v4')">
         <input type="email" name="EMAIL" class="newsletter-input-v4" placeholder="Email" required>
         <button type="submit" class="newsletter-button-v4">Join</button>
       </form>
@@ -301,16 +305,15 @@
 
   <!-- Bottom Section -->
   <div class="footer-bottom-v4">
-      <div class="footer-currency-v4">
-          <button id="currency-toggle-button" class="currency-button-v4">
+      <div class="currency-container-unique">
+          <button class="currency-button-unique currency-dropdown-trigger" onclick="handleCurrencyToggle('currency-dropdown-v4', this)">
               <span>🇺🇸 USD $ ▾</span>
           </button>
-          <div id="currency-dropdown-v4" class="currency-dropdown-v4">
+          <div id="currency-dropdown-v4" class="currency-dropdown-unique">
               <ul>
-                  <li><a href="#" data-currency="USD">USD</a></li>
-                  <li><a href="#" data-currency="EUR">EUR</a></li>
-                  <li><a href="#" data-currency="CAD">CAD</a></li>
-                  <!-- Add other currencies as needed -->
+                  <li><a href="#" class="currency-dropdown-link-unique" data-currency="USD">USD</a></li>
+                  <li><a href="#" class="currency-dropdown-link-unique" data-currency="EUR">EUR</a></li>
+                  <li><a href="#" class="currency-dropdown-link-unique" data-currency="CAD">CAD</a></li>
               </ul>
           </div>
       </div>
@@ -331,84 +334,80 @@
 
 <!-- Step 3: The Robust JavaScript Solution -->
 <script>
-// This function runs our main code once the elements are on the page.
-function initializeFooter() {
-    // --- Define Elements ---
-    const currencyButton = document.getElementById('currency-toggle-button');
-    const currencyDropdown = document.getElementById('currency-dropdown-v4');
-    const newsletterForm = document.getElementById('newsletter-form-v4');
-    const successMessage = document.getElementById('success-message-v4');
+    // --- Attaching functions to the window object to make them globally accessible ---
+    // This ensures that the onclick/onsubmit attributes in your HTML can find these functions.
+    let activeCurrencyDropdownId = null;
+    let activeCurrencyToggleButton = null;
 
-    // --- Check if elements exist ---
-    if (!currencyButton || !currencyDropdown || !newsletterForm) {
-        console.log("Waiting for footer elements to appear...");
-        return; // Exit and wait for the observer to try again.
-    }
-    
-    console.log("New footer elements found! Initializing...");
-
-    // --- Currency Dropdown Functionality ---
-    currencyButton.addEventListener('click', function() {
-        const isCurrentlyOpen = currencyDropdown.style.display === 'block';
-        currencyDropdown.style.display = isCurrentlyOpen ? 'none' : 'block';
-    });
-
-    currencyDropdown.addEventListener('click', function(e) {
-        if (e.target.tagName === 'A') {
-            e.preventDefault();
-            const currency = e.target.getAttribute('data-currency');
-            const buttonSpan = currencyButton.querySelector('span');
-            if (buttonSpan) {
-                // Keep the flag emoji
-                buttonSpan.innerHTML = `🇺🇸 ${currency} $ ▾`;
+    window.handleCurrencyToggle = function(dropdownId, buttonElement) {
+        const dropdown = document.getElementById(dropdownId);
+        if (dropdown) {
+            const isCurrentlyOpen = dropdown.style.display === 'block';
+            if (isCurrentlyOpen) {
+                dropdown.style.display = 'none';
+                activeCurrencyDropdownId = null;
+                activeCurrencyToggleButton = null;
+            } else {
+                if (activeCurrencyDropdownId) {
+                    document.getElementById(activeCurrencyDropdownId).style.display = 'none';
+                }
+                dropdown.style.display = 'block';
+                activeCurrencyDropdownId = dropdownId;
+                activeCurrencyToggleButton = buttonElement;
             }
-            currencyDropdown.style.display = 'none';
         }
-    });
-    
-    // --- Close dropdown when clicking outside ---
-    document.addEventListener('click', function(e) {
-        if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
-            currencyDropdown.style.display = 'none';
+    };
+
+    document.addEventListener('click', function (e) {
+        if (activeCurrencyDropdownId && activeCurrencyToggleButton) {
+            const dropdown = document.getElementById(activeCurrencyDropdownId);
+            if (dropdown && !dropdown.contains(e.target) && !activeCurrencyToggleButton.contains(e.target)) {
+                dropdown.style.display = 'none';
+                activeCurrencyDropdownId = null;
+                activeCurrencyToggleButton = null;
+            }
         }
     });
 
-    // --- Newsletter Form Submission ---
-    newsletterForm.addEventListener('submit', function(event) {
+    // Make the currency links work
+    document.querySelectorAll('.currency-dropdown-link-unique').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const currency = this.getAttribute('data-currency');
+            const button = this.closest('.currency-container-unique').querySelector('.currency-dropdown-trigger span');
+            if(button) {
+                button.innerHTML = `🇺🇸 ${currency} $ ▾`;
+            }
+            this.closest('.currency-dropdown-unique').style.display = 'none';
+            activeCurrencyDropdownId = null;
+            activeCurrencyToggleButton = null;
+        });
+    });
+
+    let newsletterSuccessMessageTimers = {};
+    window.handleNewsletterSubmit = function(event, type) {
         event.preventDefault();
         const form = event.target;
         form.submit(); // Submits to the iframe
 
-        if (successMessage) {
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
+        const message = document.getElementById(`success-message-${type}`);
+        if (message) {
+            message.style.display = 'block';
+            if (newsletterSuccessMessageTimers[type]) {
+                clearTimeout(newsletterSuccessMessageTimers[type]);
+            }
+            newsletterSuccessMessageTimers[type] = setTimeout(() => {
+                message.style.display = 'none';
             }, 5000);
         }
         form.reset();
-    });
+    };
     
     // --- Failsafe to hide the default footer ---
-    const defaultFooter = document.getElementById('fw-section-footer');
-    if (defaultFooter) {
-        defaultFooter.style.display = 'none';
-    }
-
-    // --- Disconnect the observer once initialization is successful ---
-    if (window.footerObserver) {
-        window.footerObserver.disconnect();
-        console.log("New footer initialized. Observer disconnected.");
-    }
-}
-
-// --- MutationObserver Setup ---
-// This watches for changes and tries to run our setup function until it succeeds.
-window.footerObserver = new MutationObserver(initializeFooter);
-window.footerObserver.observe(document.body, {
-    childList: true,
-    subtree: true
-});
-
-// Also run on DOMContentLoaded as a fallback.
-document.addEventListener('DOMContentLoaded', initializeFooter);
+    document.addEventListener('DOMContentLoaded', function() {
+        const defaultFooter = document.getElementById('fw-section-footer');
+        if (defaultFooter) {
+            defaultFooter.style.display = 'none';
+        }
+    });
 </script>
