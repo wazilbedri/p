@@ -100,9 +100,9 @@
       position: absolute;
       top: 100%; 
       left: 0;
-      background-color: #161712;
+      background-color: #000;
       border: 1px solid #444;
-     /* min-width: 100px; */
+      min-width: 100px;
       z-index: 1000;
       margin-top: 5px; 
   }
@@ -302,6 +302,7 @@
       <p class="newsletter-text-v3">
         Join our newsletter for exclusive deals and 10% off your first order.
       </p>
+      <!-- UPDATED: Removed onsubmit attribute -->
       <form id="newsletter-form" class="newsletter-form-v3" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe">
         <input type="email" name="EMAIL" class="newsletter-input-v3" placeholder="Your email address" required>
         <div class="visually-hidden" aria-hidden="true"><input type="text" name="b_cbbfe1d906378ad9ed06537c9_9cf73c7e37" tabindex="-1" value=""></div>
@@ -337,6 +338,7 @@
 
 <!-- Step 3: JavaScript for Currency Selector and Newsletter -->
 <script>
+// UPDATED: This script now waits for the DOM to be ready, then attaches events directly.
 document.addEventListener('DOMContentLoaded', function() {
     
     // --- Currency Dropdown Functionality ---
@@ -371,14 +373,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const newsletterForm = document.getElementById('newsletter-form');
     if(newsletterForm) {
         newsletterForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent default form submission
             const form = event.target;
             
-            // The form still needs a target iframe to submit to Mailchimp silently
-            const iframe = document.querySelector('iframe[name="hidden_iframe"]');
-            if(iframe) {
-                form.submit();
-            }
+            // We can still submit to the iframe for Mailchimp
+            form.submit();
 
             const message = document.getElementById('success-message-v3');
             if (message) {
