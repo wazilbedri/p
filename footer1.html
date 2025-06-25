@@ -1,1033 +1,414 @@
+<!-- ============================================================================== -->
+<!-- ============== SELF-CONTAINED MULTI-COLUMN FOOTER DESIGN ===================== -->
+<!-- ============================================================================== -->
+<!-- 
+  INSTRUCTIONS:
+  1. This is the final, complete version with a more robust JavaScript implementation.
+  2. Place this entire code block into your website's custom FOOTER injection area.
+-->
 
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Step 1: All necessary CSS for styling and positioning -->
 <style>
+  /* --- HIDE DEFAULT FOOTER --- */
+  #fw-section-footer {
+    display: none !important;
+  }
 
-/* Changed to position: fixed; bottom: 0; as requested. */
-/* IMPORTANT: This will cause content to flow *underneath* the footer. */
-/* To prevent overlap, you typically need padding-bottom on the <body> or main content wrapper, */
-/* which you mentioned you cannot modify. Be aware of potential content being hidden. */
+  /* --- STICKY FOOTER LAYOUT (THE CSS FIX) --- */
+  html, body {
+    height: 100%;
+  }
+  .page {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+  }
+  .page__main {
+    flex: 1 0 auto !important;
+  }
+  .page__footer {
+    flex-shrink: 0 !important;
+  }
 
+  /* --- STYLING FOR THE NEW FOOTER DESIGN --- */
+  .custom-footer-container-v3 {
+    background-color: #161712;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding: 60px 5% 30px 5%;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
-html, body {
-height: 100%;
-margin: 0;
-padding: 0;
-display: flex;
-flex-direction: column;
-/* Removed overflow-x: hidden as it might interfere with fixed positioning or clip content */
-}
+  .custom-footer-grid-v3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+    border-bottom: 1px solid #444;
+  }
 
-/* This specific rule 'body > .footer-mobile' was incorrect due to the 'page-wrapper' div. */
-/* Removed as it's no longer necessary with position: fixed */
-/*
-body > .footer-mobile,
-body > .footer-desktop {
-width: 100vw;
-}
-*/
+  .footer-column-v3 .column-title-v3 {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #ffffff;
+    margin-bottom: 25px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
 
-/* No longer needed as position: fixed handles the positioning */
-/*
-.footer-mobile,
-.footer-desktop {
-width: 100vw;
-margin: 0;
-padding: 0;
-}
-*/
+  .footer-column-v3 ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-/* No longer needed with position: fixed */
-/*
-.footer-mobile,
-.footer-desktop {
-margin-top: auto;
-}
-*/
-    /* --- Helper class for visually hidden elements (for accessibility) --- */
-    .visually-hidden {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
+  .footer-column-v3 ul li {
+    margin-bottom: 15px;
+  }
+
+  .footer-column-v3 ul li a {
+    color: #a0a0a0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+  }
+
+  .footer-column-v3 ul li a:hover {
+    color: #ffffff;
+  }
+  
+  /* --- CURRENCY SELECTOR STYLES --- */
+  .currency-container-unique {
+      position: relative;
+      display: inline-block;
+  }
+  
+  .currency-button-unique {
+      border: 1px solid #fff;
+      padding: 8px 12px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+  }
+  
+  .currency-dropdown-unique {
+      display: none;
+      position: absolute;
+      top: 100%; 
+      left: 0;
+      background-color: #000;
+      border: 1px solid #444;
+      min-width: 100px;
+      z-index: 1000;
+      margin-top: 5px; 
+  }
+  
+  .currency-dropdown-unique ul {
+      max-height: 200px;
+      overflow-y: auto;
+      list-style: none;
+      padding: 5px 0;
+      margin: 0;
+  }
+  
+  .currency-dropdown-unique li {
+      padding: 8px 15px;
+      margin: 0;
+  }
+  
+  .currency-dropdown-unique a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+  }
+  .currency-dropdown-unique a:hover {
+      background-color: #222;
+  }
+
+  /* --- NEWSLETTER AND SOCIALS STYLES --- */
+  .footer-column-v3 .newsletter-text-v3 {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .footer-column-v3 .newsletter-form-v3 {
+    display: flex;
+    margin-top: 10px;
+    border: 1px solid #fff;
+    background-color: #fff;
+  }
+
+  .footer-column-v3 .newsletter-input-v3 {
+    flex-grow: 1;
+    border: none;
+    background-color: transparent;
+    color: #000;
+    padding: 12px;
+    outline: none;
+    font-size: 0.9rem;
+  }
+  
+  .footer-column-v3 .newsletter-input-v3::placeholder {
+    color: #888;
+  }
+
+  .footer-column-v3 .newsletter-button-v3 {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 0 18px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+  }
+  
+  .newsletter-success-message-v3 {
+      color: #a0a0a0;
+      margin-top: 10px;
+      font-size: 0.9rem;
+  }
+
+  .footer-socials-v3 {
+    display: flex;
+    gap: 20px;
+    margin-top: 25px;
+  }
+
+  .footer-socials-v3 a {
+    color: #ffffff;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-socials-v3 a:hover {
+      opacity: 0.7;
+  }
+
+  .footer-bottom-v3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footer-payment-icons-v3 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+  }
+  
+  .footer-payment-icons-v3 img {
+      height: 24px;
+  }
+
+  .footer-copyright-v3 {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+  }
+  .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+  }
+
+  /* --- Mobile-specific centering and ordering --- */
+  @media (max-width: 767px) {
+    .custom-footer-grid-v3 {
+        grid-template-columns: 1fr; 
     }
-
-    /* --- Mobile Footer Styles --- */
-
-    .footer-mobile .footer {
-padding: 20px;       /* Keep or adjust padding as needed (see note below) */
-background-color: #fffcf2;
-color: #0f0f0f;
-/* max-width: 500px; */ /* Remove or comment out this line */
-/* margin: 0 auto; */   /* Remove or comment out this line */
-width: 100%;         /* Explicitly set width to 100% of its containing block */
-box-sizing: border-box; /* Ensures padding is included within the 100% width */
-}
-
-    .footer-mobile .footer-logo {
+    .footer-column-v3 {
+        text-align: left;
+    }
+    .custom-footer-grid-v3 .footer-column-v3:first-child {
         text-align: center;
-        margin: 20px 0;
-        position: relative;
-        left: 0;
     }
-
-    .footer-mobile .footer-logo img {
-        width: 120px;
-        height: auto;
+    .footer-socials-v3 {
+        justify-content: left;
     }
-
-    .currency-container-unique {
-text-align: center;
-margin: 20px 0;
-position: relative;
-}
-
-.currency-button-unique {
-background: none;
-border: 1px solid #1d1d1d;
-color: #000000;
-font-size: 14px;
-padding: 10px 16px;
-cursor: pointer;
-border-radius: 4px;
-}
-
-.currency-dropdown-unique {
-display: none;
-background-color: #5B382C;
-position: absolute;
-width: 80px;
-max-height: 150px;
-left: 50%;
-transform: translateX(-50%);
-top: 100%;
-z-index: 1000;
-margin-top: 6px;
-border: 1px solid #222;
-overflow-y: auto;
-border-radius: 4px;
-}
-
-.currency-dropdown-inner-unique {
-list-style: none;
-padding: 0;
-margin: 0;
-}
-
-.currency-dropdown-item-unique {
-padding: 6px 10px;
-text-align: center;
-}
-
-.currency-dropdown-link-unique {
-color: #ffffff;
-text-decoration: none;
-font-size: 12px;
-display: block;
-}
-
-.currency-dropdown-link-unique:hover {
-background-color: #7c7979;
-}
-
-.currency-dropdown-unique::-webkit-scrollbar {
-width: 4px;
-}
-
-.currency-dropdown-unique::-webkit-scrollbar-thumb {
-background-color: #444;
-border-radius: 2px;
-}
-
-
-    .footer-mobile .footer-nav {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        border-top: 1px solid #333;
-        border-bottom: 1px solid #333;
-        padding: 20px 0;
+    .footer-bottom-v3 {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
     }
-
-    .footer-mobile .footer-nav-link {
-        color: #020202;
-        text-decoration: none;
-        font-size: 17px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid #222;
+    .footer-payment-icons-v3 {
+      justify-content: center;
     }
-
-    .footer-mobile .footer-nav-link:last-child {
-        border-bottom: none;
+    .footer-copyright-v3 {
+        order: 2; 
     }
-
-    .footer-mobile .footer-nav-link img {
-        width: 12px;
-        height: auto;
+    .footer-payment-icons-v3 {
+        order: 1;
     }
+  }
 
-    .footer-mobile .social-icons {
-        display: flex;
-        justify-content: center;
-        gap: 18px;
-        font-size: 18px;
-        margin: 20px 0;
-    }
-
-    .footer-mobile .social-icons a {
-        color: #020202; /* white icons */
-        font-size: 20px;
-        transition: color 0.3s ease;
-        text-decoration: none;
-    }
-
-    .footer-mobile .newsletter {
-        text-align: center;
-        margin: 30px 0;
-    }
-
-    .footer-mobile .newsletter-label {
-        font-size: 14px;
-        letter-spacing: 1px;
-        margin-bottom: 12px;
-    }
-
-    .footer-mobile .newsletter-heading {
-        font-weight: bold;
-        font-size: 15px;
-        margin-bottom: 16px;
-    }
-
-    .footer-mobile .newsletter-form {
-        display: flex;
-        justify-content: space-between;
-        background-color: #5B382C;
-        padding: 12px 16px;
-        border-radius: 0px; /* Mobile had 0px, desktop form is different */
-        max-width: 100%;
-    }
-
-    .footer-mobile .newsletter-form input[type="email"] { /* More specific selector */
-        border: none;
-        flex: 1;
-        font-size: 13px;
-        color: #e9e9e9;
-        outline: none;
-        background-color: transparent; /* Ensure input bg is transparent */
-    }
-
-    .footer-mobile .newsletter-form input[type="email"]::placeholder {
-        color: #c4c1c1;
-    }
-
-    .footer-mobile .newsletter-form button {
-        background: none;
-        border: none;
-        color: #ffffff;
-        font-weight: lighter; /* Mobile was lighter */
-        font-size: 11px;
-        letter-spacing: 0.1rem;
-        cursor: pointer;
-        text-transform: uppercase;
-      
-        position: relative;
-    }
-    .footer-mobile .newsletter-success-message { /* Class for styling */
-        color: rgb(20, 20, 20);
-        margin-top: 10px;
-        font-size: 13px;
-        margin-top: 30px; /* As per original */
-    }
-
-
-    .footer-mobile .payment-icons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        margin: 20px 0;
-    }
-
-    .footer-mobile .payment-icons img {
-        height: 28px; /* Mobile had height 28px */
-        width: 34px;  /* Mobile had width 34px */
-        object-fit: contain;
-    }
-
-    .footer-mobile .footer-bottom {
-        text-align: center;
-        font-size: 11px;
-        color: #aaa;
-    }
-
-    /* Tablet responsiveness for mobile footer */
-    @media (min-width: 768px) and (max-width: 1024px) {
-        .footer-mobile .footer {
-            width: 100%;
-            padding: 40px 20px;
-        }
-
-        .footer-mobile .footer-logo img {
-            width: 150px;
-        }
-
-        .footer-mobile .footer-currency {
-            margin: 30px 0;
-        }
-
-        .footer-mobile .footer-nav {
-            /*flex-direction: row; Keep as column or adjust as per design for tablet */
-            gap: 14px;
-        }
-
-        .footer-mobile .footer-nav-link {
-            font-size: 16px;
-            padding: 10px 0;
-        }
-
-        .footer-mobile .social-icons {
-            gap: 24px;
-            /* font-size: 22px; */ /* Handled by individual icon 'a' tag font-size */
-            margin: 30px 0;
-        }
-        .footer-mobile .social-icons a {
-             font-size: 22px;
-        }
-
-
-        .footer-mobile .newsletter-label {
-            font-size: 12px;
-        }
-
-        .footer-mobile .newsletter-heading {
-            font-size: 16px;
-        }
-
-        .footer-mobile .newsletter-form {
-            flex-direction: row; /* Ensure it's row for tablet too */
-            padding: 12px; /* Adjusted padding for tablet */
-        }
-
-        .footer-mobile .newsletter-form input[type="email"] {
-            font-size: 16px;
-        }
-
-        .footer-mobile .newsletter-form button {
-            font-size: 14px; /* Adjusted from mobile's 11px */
-            letter-spacing: 0.5px; /* Adjusted from mobile's 0.1rem */
-        }
-
-        .footer-mobile .payment-icons {
-            gap: 16px;
-        }
-
-        .footer-mobile .payment-icons img {
-            width: 40px; /* Adjusted from mobile's 34px */
-            height: auto; /* Maintain aspect ratio */
-        }
-
-        .footer-mobile .footer-bottom {
-            font-size: 12px;
-            margin-top: 20px;
-        }
-    }
-
-    /* --- Desktop Footer Styles --- */
-    .footer-desktop .footer {
-        background: #000;
-        color: #fff;
-        padding: 40px 60px;
-        /* font-family: 'Arial', sans-serif; */ /* Using body font */
-        font-size: 18px;
-    }
-
-    .footer-desktop .footer-top { /* Target desktop footer top */
-            flex-direction: column; /* Stack logo and nav-container vertically */
-            align-items: center;   /* Center them horizontally */
-            gap: 25px; /* Adjusted gap between logo and the nav container below it, tweak as needed */
-            /* justify-content: space-between; /* No longer needed for this layout */
-        }
-
-    .footer-desktop .footer-brand .logo {
-        height: 30px; /* Desktop logo height */
-        position: relative;
-        left: 45%;
-        right: 0;
-        margin-top: 50px;
-        padding-bottom: 50px;
-    }
-
-    .footer-desktop .footer-nav-container { /* New container for currency and links */
-        display: flex;
-        align-items: center;
-        gap: 40px; /* Gap between currency and nav links block */
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .footer-desktop .footer-currency { /* Desktop currency container */
-        position: relative; /* For dropdown positioning */
-    }
-
-    .footer-desktop .currency-btn { /* This is the toggle button */
-        background: transparent;
-        border: 1px solid #fff;
-        color: #fff;
-        padding: 5px 10px;
-        cursor: pointer;
-        font-size: 14px; /* Ensuring consistency */
-    }
-
-    .footer-desktop .footer__dropdown { /* Style for desktop dropdown */
-        display: none;
-        position: absolute;
-        background-color: #000; /* Match footer bg */
-        border: 1px solid #444; /* Consistent border */
-        width: auto; /* Auto width based on content */
-        min-width: 80px;
-        max-height: 200px; /* Max height for scroll */
-        overflow-y: auto;
-        z-index: 1000;
-        top: 100%; /* Position below button */
-        left: 50%;
-        transform: translateX(-50%);
-        margin-top: 5px; /* Space from button */
-        border-radius: 4px;
-    }
-
-    .footer-desktop .footer__dropdown-inner {
-        list-style: none;
-        padding: 5px 0; /* Padding for items */
-        margin: 0;
-    }
-
-    .footer-desktop .footer__dropdown-item {
-        padding: 8px 15px; /* Padding for items */
-        text-align: left; /* Or center, as preferred */
-    }
-
-    .footer-desktop .footer__dropdown-link {
-        color: #fff;
-        text-decoration: none;
-        font-size: 13px; /* Font size for links */
-        display: block;
-        white-space: nowrap;
-    }
-
-    .footer-desktop .footer__dropdown-link:hover {
-        background-color: #222; /* Hover effect */
-    }
-    .footer-desktop .footer__dropdown::-webkit-scrollbar {
-        width: 5px;
-    }
-    .footer-desktop .footer__dropdown::-webkit-scrollbar-thumb {
-        background-color: #555;
-        border-radius: 3px;
-    }
-
-
-    .footer-desktop .footer-links { /* Class from original desktop HTML */
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .footer-desktop .footer-column a {
-        color: #fff;
-        text-decoration: none;
-        font-weight: 500; /* As per desktop */
-    }
-    .footer-desktop .footer-column a:hover {
-        text-decoration: underline;
-    }
-
-
-    .footer-desktop .footer-social {
-        text-align: center;
-        margin: 30px 0;
-    }
-    .footer-desktop .footer-social a {
-        color: #fff;
-        margin: 0 10px;
-        font-size: 20px; /* As per desktop */
-        text-decoration: none;
-    }
-
-    .footer-desktop .footer-newsletter {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .footer-desktop .newsletter-title { /* Class from desktop */
-        letter-spacing: 1px;
-        font-size: 12px;
-        margin-bottom: 5px;
-    }
-
-    .footer-desktop .newsletter-subtitle { /* Class from desktop */
-        font-weight: bold;
-        font-size: 14px; /* Desktop had 1 default, mobile had 14px for heading */
-        margin-bottom: 15px;
-    }
-
-    .footer-desktop .newsletter-form {
-        display: flex;
-        justify-content: center;
-        gap: 0; /* No gap, input and button touch */
-        max-width: 450px; /* Adjusted for typical desktop form width */
-        margin: 0 auto;
-        background-color: #fff; /* Background for the form itself */
-        /* border-radius: 4px; */ /* Optional: rounded corners for the form */
-    }
-
-    .footer-desktop .newsletter-form input[type="email"] {
-        padding: 12px 15px;
-        width: 70%; /* As per desktop */
-        border: none;
-        outline: none;
-        font-size: 14px; /* Input font size */
-        color: #000;
-        background-color: transparent;
-        /* border-radius: 4px 0 0 4px; */ /* Optional: if form has border-radius */
-    }
-     .footer-desktop .newsletter-form input[type="email"]::placeholder {
-        color: #666;
-    }
-
-
-    .footer-desktop .newsletter-form button {
-        padding: 12px 20px;
-        width: 30%; /* As per desktop (implicitly) */
-        border: none;
-        background: #fff; /* Button background from desktop */
-        color: #000; /* Button text color from desktop */
-        font-weight: bold; /* As per desktop */
-        font-size: 12px; /* Adjust for button text */
-        letter-spacing: 0.5px; /* Spacing for button text */
-        cursor: pointer;
-        text-transform: uppercase;
-        /* border-radius: 0 4px 4px 0; */ /* Optional: if form has border-radius */
-    }
-    .footer-desktop .newsletter-success-message { /* Class for styling */
-        color: rgb(200, 200, 200); /* Lighter color for desktop perhaps */
-        margin-top: 15px;
-        font-size: 13px;
-    }
-
-    .footer-desktop .divider {
-        border: none;
-        border-top: 1px solid #444;
-        margin: 30px 0;
-    }
-
-    .footer-desktop .footer-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap; /* Allow wrapping on smaller desktop widths */
-        gap: 15px; /* Gap for wrapped items */
-    }
-
-    .footer-desktop .payment-icons {
-         display: flex; /* Ensure flex for gap and alignment */
-         flex-wrap: wrap;
-         justify-content: center; /* Center if they wrap on smaller "desktop" views */
-         gap: 10px; /* Gap between icons */
-    }
-
-    .footer-desktop .payment-icons img {
-        height: 24px; /* As per desktop */
-        /* margin-right: 10px; */ /* Replaced by gap */
-        object-fit: contain;
-    }
-    .footer-desktop .payment-icons img:last-child {
-        margin-right: 0;
-    }
-
-
-    .footer-desktop .copyright { /* Class from desktop */
-        /* margin-top: 15px; */ /* Removed, handled by flex gap */
-        font-size: 12px;
-        color: #aaa;
-        text-align: right; /* Align to right if space allows */
-        flex-grow: 1; /* Allow it to take space */
-    }
-
-
-    /* Desktop specific layout for nav links (from original desktop CSS) */
-    @media screen and (min-width: 1025px) { /* This was in desktop.html, good for structure */
-        .footer-desktop .footer-top { /* Target desktop footer top */
-            flex-direction: row; /* Horizontal layout */
-            justify-content: space-between;
-            align-items: center;
-        }
-        .footer-desktop .footer-brand {
-            flex-shrink: 0; /* Prevent logo from shrinking */
-        }
-        .footer-desktop .footer-nav-container {
-             gap: 59px; /* Smaller gap when horizontal */
-        }
-
-        .footer-desktop .footer-links.with-divider {
-            display: flex;
-            justify-content: space-between; /* This might be too much if columns are not fixed width */
-            align-items: center; /* Vertically align items */
-            flex-wrap: nowrap; /* Prevent wrapping of columns */
-            gap: 0; /* Reset gap, padding controls spacing */
-        }
-
-        .footer-desktop .footer-links.with-divider .footer-column {
-            /* flex: 1 1 0%; */ /* This can make columns too wide */
-            padding: 0 15px; /* Padding between columns */
-            border-left: 1px solid #444; /* Darker divider for dark theme */
-            min-width: 120px;
-            text-align: center; /* Center text in columns */
-        }
-
-        .footer-desktop .footer-links.with-divider .footer-column:first-child {
-            border-left: none;
-            padding-left: 0;
-        }
-
-        .footer-desktop .footer-links.with-divider .footer-column:last-child {
-            padding-right: 0;
-        }
-
-        .footer-desktop .footer-bottom {
-            flex-wrap: nowrap; /* Prevent bottom items from wrapping */
-        }
-        .footer-desktop .payment-icons {
-            justify-content: flex-start; /* Align to left */
-        }
-        .footer-desktop .copyright {
-             text-align: right;
-             margin-top: 0; /* Reset margin */
-        }
-    }
-
-
-    /* --- Responsive Visibility Control --- */
-    .footer-mobile {
-        display: block; /* Mobile is visible by default */
-    }
-    .footer-desktop {
-        display: none;  /* Desktop is hidden by default */
-    }
-
-    @media (min-width: 1025px) {
-        .footer-mobile {
-            display: none;
-        }
-        .footer-desktop {
-            display: block; /* Or flex, grid etc. if its root is that */
-        }
-    }
 </style>
 
-
-
-<div class="page-wrapper">
-
-<div class="footer-mobile">
-    <footer class="footer">
-        <div class="footer-logos">
-          <img src="" alt="" />
-        </div>
-
+<!-- Step 2: The HTML for your custom footer -->
+<footer class="custom-footer-container-v3">
+  <div class="custom-footer-grid-v3">
+    <div class="footer-column-v3">
         <div class="currency-container-unique">
-            <button class="currency-button-unique currency-dropdown-trigger" onclick="handleCurrencyToggle('currencyDropdownMobileUnique', this)">USD ▾</button>
-            <div class="currency-dropdown-unique currency-dropdown-unique--content" id="currencyDropdownMobileUnique">
-              <ul class="currency-dropdown-inner-unique">
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="USD">USD</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="EUR">EUR</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="CAD">CAD</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="GBP">GBP</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="AUD">AUD</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="NZD">NZD</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="SEK">SEK</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="NOK">NOK</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="DKK">DKK</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="PLN">PLN</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="JPY">JPY</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="MYR">MYR</a></li>
-                <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="SGD">SGD</a></li>
-              </ul>
-            </div>
-          </div>
-
-
-        <div class="footer-nav">
-          <a href="https://warmquote.com/pages/about" class="footer-nav-link">About <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/pages/contact" class="footer-nav-link">Contact <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/pages/privacy-policy" class="footer-nav-link">Privacy Policy <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/pages/returns-faq" class="footer-nav-link">Returns & FAQ <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
-          <a href="https://warmquote.com/en-usd/pages/terms-of-service" class="footer-nav-link">Terms of Service <img src="https://raw.githubusercontent.com/wazilbedri/w/main/arrowblack.svg" alt="Arrow" /></a>
-        </div>
-
-        <div class="social-icons">
-          <a href="https://instagram.com/warmquote" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="https://pinterest.com/warmquote" target="_blank" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
-          <a href="https://www.tiktok.com/@warm.quote" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-          <a href="https://www.youtube.com/@warmquote" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a> <a href="https://www.threads.net/@warmquote" target="_blank" aria-label="Threads"><i class="fa-brands fa-threads"></i></a>
-        </div>
-
-
-        <div class="newsletter">
-          <p class="newsletter-label">NEWSLETTER</p>
-          <p class="newsletter-heading">SIGN UP AND GET 10% OFF</p>
-
-          <form
-            class="newsletter-form"
-            action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37"
-            method="POST"
-            target="hidden_iframe_mobile"
-            onsubmit="handleNewsletterSubmit(event, 'mobile')"
-            data-type="mobile"
-          >
-            <input
-              type="email"
-              name="EMAIL"
-              placeholder="Email address"
-              required
-            />
-            <div class="visually-hidden" aria-hidden="true"> <input type="text" name="b_cbbfe1d906378ad9ed06537c9_9cf73c7e37" tabindex="-1" value="">
-            </div>
-            <button type="submit">SUBSCRIBE</button>
-          </form>
-
-          <p id="success-message-mobile" class="newsletter-success-message" style="display:none;">
-            Thanks for subscribing
-          </p>
-
-          <iframe name="hidden_iframe_mobile" title="Hidden Iframe for Mobile Newsletter" style="display:none;"></iframe>
-        </div>
-
-
-        <div class="payment-icons">
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/amx.svg" alt="American Express" />
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/apple.svg" alt="Apple Pay" />
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/google.svg" alt="Google Pay" />
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/mestro.svg" alt="Maestro" />
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/master.svg" alt="Mastercard" />
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/paypal.svg" alt="PayPal" />
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/union.svg" alt="UnionPay" />
-          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/visa.svg" alt="Visa" />
-        </div>
-
-        <div class="footer-bottom">
-          <p>© 2025 WarmQuote. All rights reserved. Powered by Fourthwall.</p>
-        </div>
-    </footer>
-</div>
-
-<div class="footer-desktop">
-    <hr class="divider"/>
-    <footer class="footer">
-        <div class="footer-top">
-            <div class="footer-brand">
-            <img src="" alt="" class="logos" />
-            </div>
-
-            <div class="footer-nav-container">
-                <div class="footer-currency"> <button class="currency-btn currency-dropdown-trigger" onclick="handleCurrencyToggle('currencyDropdownDesktop', this)">USD ▾</button>
-                    <div class="footer__dropdown footer__dropdown--content" id="currencyDropdownDesktop">
-                        <ul class="footer__dropdown-inner">
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="USD">USD</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="EUR">EUR</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="CAD">CAD</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="GBP">GBP</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="AUD">AUD</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="NZD">NZD</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="SEK">SEK</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="NOK">NOK</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="DKK">DKK</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="PLN">PLN</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="JPY">JPY</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="MYR">MYR</a></li>
-                            <li class="footer__dropdown-item"><a class="footer__dropdown-link" href="#" data-currency="SGD">SGD</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <nav class="footer-links with-divider"> <div class="footer-column">
-                    <a href="https://warmquote.com/pages/about">About</a>
-                    </div>
-                    <div class="footer-column">
-                    <a href="https://warmquote.com/pages/contact">Contact</a>
-                    </div>
-                    <div class="footer-column">
-                    <a href="https://warmquote.com/pages/privacy-policy">Privacy Policy</a>
-                    </div>
-                    <div class="footer-column">
-                    <a href="https://warmquote.com/pages/returns-faq">Returns & FAQ</a>
-                    </div>
-                    <div class="footer-column">
-                    <a href="https://warmquote.com/pages/terms-of-service">Terms of Service</a>
-                    </div>
-                </nav>
+            <!-- UPDATED: Removed onclick -->
+            <button id="currency-toggle-button" class="currency-button-unique">
+                <span>USD ▾</span>
+            </button>
+            <div id="currencyDropdown-v3" class="currency-dropdown-unique">
+                <ul>
+                    <li><a href="#" data-currency="USD">USD</a></li>
+                    <li><a href="#" data-currency="EUR">EUR</a></li>
+                    <li><a href="#" data-currency="CAD">CAD</a></li>
+                    <li><a href="#" data-currency="GBP">GBP</a></li>
+                    <li><a href="#" data-currency="AUD">AUD</a></li>
+                    <li><a href="#" data-currency="NZD">NZD</a></li>
+                </ul>
             </div>
         </div>
+    </div>
+    <div class="footer-column-v3">
+      <h3 class="column-title-v3">Quick Links</h3>
+      <ul>
+        <li><a href="/pages/about">About</a></li>
+        <li><a href="/pages/contact">Contact</a></li>
+        <li><a href="/collections/all">Shop All</a></li>
+        <li><a href="/">Home</a></li>
+      </ul>
+    </div>
+    <div class="footer-column-v3">
+      <h3 class="column-title-v3">Policies</h3>
+      <ul>
+        <li><a href="/pages/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/pages/terms-of-service">Terms of Service</a></li>
+        <li><a href="/pages/returns-faq">Returns & FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-column-v3">
+      <h3 class="column-title-v3">Stay Connected</h3>
+      <p class="newsletter-text-v3">
+        Join our newsletter for exclusive deals and 10% off your first order.
+      </p>
+      <!-- UPDATED: Removed onsubmit attribute -->
+      <form id="newsletter-form" class="newsletter-form-v3" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe">
+        <input type="email" name="EMAIL" class="newsletter-input-v3" placeholder="Your email address" required>
+        <div class="visually-hidden" aria-hidden="true"><input type="text" name="b_cbbfe1d906378ad9ed06537c9_9cf73c7e37" tabindex="-1" value=""></div>
+        <button type="submit" class="newsletter-button-v3">Join</button>
+      </form>
+      <p id="success-message-v3" class="newsletter-success-message-v3" style="display:none;">Thanks for subscribing</p>
+      <iframe name="hidden_iframe" title="Hidden Iframe for Newsletter" style="display:none;"></iframe>
+      <div class="footer-socials-v3">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <a href="https://instagram.com/warmquote" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://pinterest.com/warmquote" target="_blank" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+        <a href="https://www.tiktok.com/@warm.quote" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://youtube.com/channel/UC7b-j8FSpvsQPU4RPS8I3kg" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
 
-        <div class="footer-social">
-            <a href="https://instagram.com/warmquote" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://pinterest.com/warmquote" target="_blank" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a> <a href="https://www.tiktok.com/@warm.quote" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-            <a href="https://www.youtube.com/@warmquote" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.threads.net/@warmquote" target="_blank" aria-label="Threads"><i class="fa-brands fa-threads"></i></a> </div>
+  <div class="footer-bottom-v3">
+      <div class="footer-payment-icons-v3">
+          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/amx.svg" alt="American Express">
+          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/apple.svg" alt="Apple Pay">
+          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/google.svg" alt="Google Pay">
+          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/master.svg" alt="Mastercard">
+          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/paypal.svg" alt="PayPal">
+          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/union.svg" alt="UnionPay">
+          <img src="https://raw.githubusercontent.com/wazilbedri/p/main/visa.svg" alt="Visa">
+      </div>
+      <div class="footer-copyright-v3">
+        &copy; 2025 WarmQuote. All Rights Reserved.
+      </div>
+  </div>
+</footer>
 
-        <div class="footer-newsletter">
-            <p class="newsletter-title">NEWSLETTER</p>
-            <p class="newsletter-subtitle">SIGN UP AND GET 10% OFF</p>
-            <form
-                class="newsletter-form"
-                action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37"
-                method="POST"
-                target="hidden_iframe_desktop"
-                onsubmit="handleNewsletterSubmit(event, 'desktop')"
-                data-type="desktop"
-            >
-                <input type="email" name="EMAIL" placeholder="Email address" required />
-                <div class="visually-hidden" aria-hidden="true">
-                    <input type="text" name="b_cbbfe1d906378ad9ed06537c9_9cf73c7e37" tabindex="-1" value="">
-                </div>
-                <button type="submit">SUBSCRIBE</button>
-            </form>
-            <p id="success-message-desktop" class="newsletter-success-message" style="display:none;">
-                Thanks for subscribing
-            </p>
-            <iframe name="hidden_iframe_desktop" title="Hidden Iframe for Desktop Newsletter" style="display:none;"></iframe>
-        </div>
-
-        <hr class="divider" />
-
-        <div class="footer-bottom">
-            <div class="payment-icons">
-                <img src="https://raw.githubusercontent.com/wazilbedri/p/main/amx.svg" alt="American Express" />
-                <img src="https://raw.githubusercontent.com/wazilbedri/p/main/apple.svg" alt="Apple Pay" />
-                <img src="https://raw.githubusercontent.com/wazilbedri/p/main/google.svg" alt="Google Pay" />
-                <img src="https://raw.githubusercontent.com/wazilbedri/p/main/master.svg" alt="Mastercard" />
-                <img src="https://raw.githubusercontent.com/wazilbedri/p/main/paypal.svg" alt="PayPal" />
-                <img src="https://raw.githubusercontent.com/wazilbedri/p/main/union.svg" alt="UnionPay" />
-                <img src="https://raw.githubusercontent.com/wazilbedri/p/main/visa.svg" alt="Visa" />
-            </div>
-            <p class="copyright">
-            © 2025 WarmQuote. All rights reserved. Powered by Fourthwall.
-            </p>
-        </div>
-    </footer>
-</div>
-
-
+<!-- Step 3: JavaScript for Currency Selector and Newsletter -->
 <script>
-    // Currency Dropdown Functionality
-    let activeCurrencyDropdownId = null;
-    let activeCurrencyToggleButton = null;
+// UPDATED: This script now waits for the DOM to be ready, then attaches events directly.
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- Currency Dropdown Functionality ---
+    const currencyButton = document.getElementById('currency-toggle-button');
+    const currencyDropdown = document.getElementById('currencyDropdown-v3');
 
-    function handleCurrencyToggle(dropdownId, buttonElement) {
-        const dropdown = document.getElementById(dropdownId);
-        if (dropdown) {
-            const isCurrentlyOpen = dropdown.style.display === 'block';
+    if(currencyButton && currencyDropdown) {
+        currencyButton.addEventListener('click', function() {
+            const isCurrentlyOpen = currencyDropdown.style.display === 'block';
+            currencyDropdown.style.display = isCurrentlyOpen ? 'none' : 'block';
+        });
 
-            if (isCurrentlyOpen) {
-                dropdown.style.display = 'none';
-                if (activeCurrencyDropdownId === dropdownId) {
-                    activeCurrencyDropdownId = null;
-                    activeCurrencyToggleButton = null;
+        currencyDropdown.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                const currency = e.target.getAttribute('data-currency');
+                const buttonSpan = currencyButton.querySelector('span');
+                if (buttonSpan) {
+                    buttonSpan.textContent = currency + ' ▾';
                 }
-            } else {
-                if (activeCurrencyDropdownId && activeCurrencyDropdownId !== dropdownId) {
-                    const otherDropdown = document.getElementById(activeCurrencyDropdownId);
-                    if (otherDropdown) {
-                        otherDropdown.style.display = 'none';
-                    }
-                }
-                dropdown.style.display = 'block';
-                activeCurrencyDropdownId = dropdownId;
-                activeCurrencyToggleButton = buttonElement;
-            }
-        }
-    }
-
-    document.addEventListener('click', function (e) {
-        // Close currency dropdown if click is outside
-        if (activeCurrencyDropdownId && activeCurrencyToggleButton) {
-            const dropdown = document.getElementById(activeCurrencyDropdownId);
-            if (dropdown && dropdown.style.display === 'block' && !dropdown.contains(e.target) && !activeCurrencyToggleButton.contains(e.target)) {
-                dropdown.style.display = 'none';
-                activeCurrencyDropdownId = null;
-                activeCurrencyToggleButton = null;
-            }
-        }
-
-        // Close newsletter success message if click is outside
-        ['mobile', 'desktop'].forEach(type => {
-            const formContainer = document.querySelector(`.footer-${type} .newsletter`);
-            const message = document.getElementById(`success-message-${type}`);
-
-            if (formContainer && message && message.style.display === 'block') {
-                if (!formContainer.contains(e.target) && !message.contains(e.target)) {
-                     message.style.display = 'none';
-                     if (newsletterSuccessMessageTimers[type]) {
-                        clearTimeout(newsletterSuccessMessageTimers[type]);
-                     }
-                }
+                currencyDropdown.style.display = 'none';
+                
+                const currentPath = window.location.pathname + window.location.search;
+                const redirectUrl = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPath)}`;
+                console.log("Currency selected. Would redirect to: " + redirectUrl);
+                // window.location.href = redirectUrl; // UNCOMMENT TO ENABLE
             }
         });
-    });
+    }
 
-    // Dynamically set the currency and return_to path for currency links
-    document.querySelectorAll('.footer__dropdown-link').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const currency = this.getAttribute('data-currency');
-            const parentDropdown = this.closest('.footer__dropdown--content');
+    // --- Newsletter Form Submission ---
+    const newsletterForm = document.getElementById('newsletter-form');
+    if(newsletterForm) {
+        newsletterForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const form = event.target;
+            
+            // We can still submit to the iframe for Mailchimp
+            form.submit();
 
-            if (parentDropdown) {
-                const toggleButton = parentDropdown.parentElement.querySelector('.currency-dropdown-trigger');
-                if (toggleButton) {
-                    toggleButton.firstChild.nodeValue = currency + ' ▾';
-                }
-                parentDropdown.style.display = 'none';
-                if (activeCurrencyDropdownId === parentDropdown.id) {
-                   activeCurrencyDropdownId = null;
-                   activeCurrencyToggleButton = null;
-                }
+            const message = document.getElementById('success-message-v3');
+            if (message) {
+                message.style.display = 'block';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 5000);
             }
-
-            const currentPath = window.location.pathname + window.location.search;
-            const redirectUrl = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPath)}`;
-            console.log("Currency selected. Redirecting to (simulated): " + redirectUrl);
-            // window.location.href = redirectUrl; // Uncomment to enable redirection
+            form.reset();
         });
+    }
+    
+    // --- Close dropdown when clicking outside ---
+    document.addEventListener('click', function(e) {
+        if(currencyButton && currencyDropdown) {
+            if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
+                currencyDropdown.style.display = 'none';
+            }
+        }
     });
-
-    // Newsletter Form Submission
-    let newsletterSuccessMessageTimers = {};
-
-    function handleNewsletterSubmit(event, type) {
-        event.preventDefault();
-        const form = event.target;
-
-        form.submit(); // Submits silently to Mailchimp via iframe
-
-        const message = document.getElementById(`success-message-${type}`);
-        if (message) {
-            message.style.display = 'block';
-
-            if (newsletterSuccessMessageTimers[type]) {
-                clearTimeout(newsletterSuccessMessageTimers[type]);
-            }
-
-            newsletterSuccessMessageTimers[type] = setTimeout(() => {
-                message.style.display = 'none';
-            }, 5000);
+    
+    // --- Failsafe to hide the default footer ---
+    const hideDefaultFooter = () => {
+        const defaultFooter = document.getElementById('fw-section-footer');
+        if (defaultFooter) {
+            defaultFooter.style.display = 'none';
         }
+    };
+    hideDefaultFooter();
+    setTimeout(hideDefaultFooter, 500);
 
-        form.reset(); // Reset the form fields
-    }
+});
 </script>
-
-<script>
-    // The JavaScript to adjust margin-top is no longer necessary with position: fixed.
-    // It has been commented out to avoid conflicts.
-    /*
-    document.addEventListener("DOMContentLoaded", function() {
-        function adjustFooterPosition() {
-            const footerMobile = document.querySelector(".footer-mobile");
-            const footerDesktop = document.querySelector(".footer-desktop");
-            let activeFooter = null;
-
-            if (footerMobile && window.getComputedStyle(footerMobile).display !== 'none') {
-                activeFooter = footerMobile;
-            } else if (footerDesktop && window.getComputedStyle(footerDesktop).display !== 'none') {
-                activeFooter = footerDesktop;
-            }
-
-            if (activeFooter) {
-                activeFooter.style.marginTop = '0px';
-
-                const documentContentHeight = Math.max(
-                    document.body.scrollHeight,
-                    document.documentElement.scrollHeight
-                );
-
-                const viewportHeight = window.innerHeight;
-
-                if (documentContentHeight < viewportHeight) {
-                    const marginNeeded = viewportHeight - documentContentHeight;
-                    activeFooter.style.marginTop = marginNeeded + 'px';
-                } else {
-                    activeFooter.style.marginTop = '';
-                }
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", adjustFooterPosition);
-        window.addEventListener('resize', adjustFooterPosition);
-    });
-    */
-</script>
-
-<style>
-    /* Reset footer positioning */
-    .footer-mobile,
-    .footer-desktop {
-      position: relative;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-  
-    /* Spacer that will be dynamically added */
-    #footer-spacer {
-      width: 100%;
-      height: 0;
-      pointer-events: none;
-    }
-  </style>
-  
-  <script>
-    (function () {
-      function ensureFooterAtBottom() {
-        const footerMobile = document.querySelector('.footer-mobile');
-        const footerDesktop = document.querySelector('.footer-desktop');
-        const activeFooter =
-          window.getComputedStyle(footerMobile).display !== 'none'
-            ? footerMobile
-            : window.getComputedStyle(footerDesktop).display !== 'none'
-            ? footerDesktop
-            : null;
-  
-        if (!activeFooter) return;
-  
-        // Remove any existing spacer
-        const oldSpacer = document.getElementById('footer-spacer');
-        if (oldSpacer) oldSpacer.remove();
-  
-        const bodyHeight = document.body.scrollHeight;
-        const viewportHeight = window.innerHeight;
-  
-        if (bodyHeight < viewportHeight) {
-          const spacer = document.createElement('div');
-          spacer.id = 'footer-spacer';
-          spacer.style.height = (viewportHeight - bodyHeight) + 'px';
-          activeFooter.parentNode.insertBefore(spacer, activeFooter);
-        }
-      }
-  
-      window.addEventListener('load', ensureFooterAtBottom);
-      window.addEventListener('resize', ensureFooterAtBottom);
-    })();
-  </script>
-</div>
-
-
