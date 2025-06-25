@@ -265,7 +265,6 @@
   <div class="custom-footer-grid-v3">
     <div class="footer-column-v3">
         <div class="currency-container-unique">
-            <!-- UPDATED: Removed onclick -->
             <button id="currency-toggle-button" class="currency-button-unique">
                 <span>USD ▾</span>
             </button>
@@ -303,7 +302,6 @@
       <p class="newsletter-text-v3">
         Join our newsletter for exclusive deals and 10% off your first order.
       </p>
-      <!-- UPDATED: Removed onsubmit attribute -->
       <form id="newsletter-form" class="newsletter-form-v3" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe">
         <input type="email" name="EMAIL" class="newsletter-input-v3" placeholder="Your email address" required>
         <div class="visually-hidden" aria-hidden="true"><input type="text" name="b_cbbfe1d906378ad9ed06537c9_9cf73c7e37" tabindex="-1" value=""></div>
@@ -337,78 +335,89 @@
   </div>
 </footer>
 
-<!-- Step 3: JavaScript for Currency Selector and Newsletter -->
+<!-- Step 3: The Robust JavaScript Solution -->
 <script>
-// UPDATED: This script now waits for the DOM to be ready, then attaches events directly.
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // --- Currency Dropdown Functionality ---
+// This function runs our main code.
+function initializeFooter() {
+    // --- Define Elements ---
     const currencyButton = document.getElementById('currency-toggle-button');
     const currencyDropdown = document.getElementById('currencyDropdown-v3');
+    const newsletterForm = document.getElementById('newsletter-form');
+    const successMessage = document.getElementById('success-message-v3');
 
-    if(currencyButton && currencyDropdown) {
-        currencyButton.addEventListener('click', function() {
-            const isCurrentlyOpen = currencyDropdown.style.display === 'block';
-            currencyDropdown.style.display = isCurrentlyOpen ? 'none' : 'block';
-        });
-
-        currencyDropdown.addEventListener('click', function(e) {
-            if (e.target.tagName === 'A') {
-                e.preventDefault();
-                const currency = e.target.getAttribute('data-currency');
-                const buttonSpan = currencyButton.querySelector('span');
-                if (buttonSpan) {
-                    buttonSpan.textContent = currency + ' ▾';
-                }
-                currencyDropdown.style.display = 'none';
-                
-                const currentPath = window.location.pathname + window.location.search;
-                const redirectUrl = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPath)}`;
-                console.log("Currency selected. Would redirect to: " + redirectUrl);
-                // window.location.href = redirectUrl; // UNCOMMENT TO ENABLE
-            }
-        });
+    // --- Check if elements exist ---
+    if (!currencyButton || !currencyDropdown || !newsletterForm) {
+        console.log("Waiting for footer elements to appear...");
+        return; // If elements aren't ready, exit and wait for the next check.
     }
+    
+    console.log("Footer elements found! Initializing...");
+
+    // --- Currency Dropdown Functionality ---
+    currencyButton.addEventListener('click', function() {
+        const isCurrentlyOpen = currencyDropdown.style.display === 'block';
+        currencyDropdown.style.display = isCurrentlyOpen ? 'none' : 'block';
+    });
+
+    currencyDropdown.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') {
+            e.preventDefault();
+            const currency = e.target.getAttribute('data-currency');
+            const buttonSpan = currencyButton.querySelector('span');
+            if (buttonSpan) {
+                buttonSpan.textContent = currency + ' ▾';
+            }
+            currencyDropdown.style.display = 'none';
+        }
+    });
 
     // --- Newsletter Form Submission ---
-    const newsletterForm = document.getElementById('newsletter-form');
-    if(newsletterForm) {
-        newsletterForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            const form = event.target;
-            
-            // We can still submit to the iframe for Mailchimp
-            form.submit();
+    newsletterForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const form = event.target;
+        form.submit(); // Submits to the iframe
 
-            const message = document.getElementById('success-message-v3');
-            if (message) {
-                message.style.display = 'block';
-                setTimeout(() => {
-                    message.style.display = 'none';
-                }, 5000);
-            }
-            form.reset();
-        });
-    }
+        if (successMessage) {
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 5000);
+        }
+        form.reset();
+    });
     
     // --- Close dropdown when clicking outside ---
     document.addEventListener('click', function(e) {
-        if(currencyButton && currencyDropdown) {
-            if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
-                currencyDropdown.style.display = 'none';
-            }
+        if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
+            currencyDropdown.style.display = 'none';
         }
     });
-    
-    // --- Failsafe to hide the default footer ---
-    const hideDefaultFooter = () => {
-        const defaultFooter = document.getElementById('fw-section-footer');
-        if (defaultFooter) {
-            defaultFooter.style.display = 'none';
-        }
-    };
-    hideDefaultFooter();
-    setTimeout(hideDefaultFooter, 500);
 
+    // --- Failsafe to hide the default footer ---
+    const defaultFooter = document.getElementById('fw-section-footer');
+    if (defaultFooter) {
+        defaultFooter.style.display = 'none';
+    }
+
+    // --- Disconnect the observer once initialization is successful ---
+    // This is a crucial performance optimization.
+    if (observer) {
+        observer.disconnect();
+        console.log("Footer initialized successfully. Observer disconnected.");
+    }
+}
+
+// --- MutationObserver Setup ---
+// This watches for changes on the page and tries to run our setup function.
+const observer = new MutationObserver(initializeFooter);
+
+// Start observing the entire document body for added nodes.
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
 });
+
+// Also run on DOMContentLoaded as a fallback.
+document.addEventListener('DOMContentLoaded', initializeFooter);
+
 </script>
