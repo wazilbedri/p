@@ -3,8 +3,7 @@
 <!-- ============================================================================== -->
 <!-- 
   INSTRUCTIONS:
-  1. This is a complete, self-contained footer, redesigned to match your image
-     and with all functionality and layout issues corrected.
+  1. This is the final, complete version with a more robust JavaScript implementation.
   2. Place this entire code block into your website's custom FOOTER injection area.
 -->
 
@@ -81,7 +80,7 @@
     color: #ffffff;
   }
   
-  /* --- CURRENCY SELECTOR STYLES (from footer1orginal.html) --- */
+  /* --- CURRENCY SELECTOR STYLES --- */
   .currency-container-unique {
       position: relative;
       display: inline-block;
@@ -99,32 +98,34 @@
   .currency-dropdown-unique {
       display: none;
       position: absolute;
-      top: 100%; /* Position it below the button */
+      top: 100%; 
       left: 0;
       background-color: #161712;
       border: 1px solid #444;
-      /* min-width: 100px;*/
+     /* min-width: 100px; */
       z-index: 1000;
       margin-top: 5px; 
   }
   
-  .currency-dropdown-unique ul, .currency-dropdown-inner-unique {
+  .currency-dropdown-unique ul {
       max-height: 200px;
       overflow-y: auto;
       list-style: none;
       padding: 5px 0;
+      margin: 0;
   }
   
-  .currency-dropdown-unique .currency-dropdown-item-unique {
+  .currency-dropdown-unique li {
       padding: 8px 15px;
+      margin: 0;
   }
   
-  .currency-dropdown-unique .currency-dropdown-link-unique {
+  .currency-dropdown-unique a {
       color: #fff;
       text-decoration: none;
       font-size: 0.9rem;
   }
-  .currency-dropdown-unique .currency-dropdown-link-unique:hover {
+  .currency-dropdown-unique a:hover {
       background-color: #222;
   }
 
@@ -203,7 +204,7 @@
   
   .footer-payment-icons-v3 {
       display: flex;
-      flex-wrap: wrap; /* Allow icons to wrap if needed */
+      flex-wrap: wrap;
       gap: 8px;
   }
   
@@ -230,31 +231,30 @@
   /* --- Mobile-specific centering and ordering --- */
   @media (max-width: 767px) {
     .custom-footer-grid-v3 {
-        grid-template-columns: 1fr; /* Force a single column layout */
+        grid-template-columns: 1fr; 
     }
     .footer-column-v3 {
-        text-align: left; /* Set default alignment to left for columns */
+        text-align: left;
     }
-    /* This rule specifically targets the first column (currency) and centers it */
     .custom-footer-grid-v3 .footer-column-v3:first-child {
         text-align: center;
     }
     .footer-socials-v3 {
-        justify-content: left; /* Align social icons to the left */
+        justify-content: left;
     }
     .footer-bottom-v3 {
-      flex-direction: column; /* Stack vertically */
-      justify-content: center;   /* Center the stacked items */
+      flex-direction: column;
+      justify-content: center;
       text-align: center;
     }
     .footer-payment-icons-v3 {
-      justify-content: center; /* Center the payment icons container */
+      justify-content: center;
     }
     .footer-copyright-v3 {
-        order: 2; /* CORRECTED: This now appears after the payment icons */
+        order: 2; 
     }
     .footer-payment-icons-v3 {
-        order: 1; /* CORRECTED: This now appears before the copyright text */
+        order: 1;
     }
   }
 
@@ -262,28 +262,24 @@
 
 <!-- Step 2: The HTML for your custom footer -->
 <footer class="custom-footer-container-v3">
-  <!-- Top Section with columns -->
   <div class="custom-footer-grid-v3">
-    <!-- Column 1: Currency -->
     <div class="footer-column-v3">
         <div class="currency-container-unique">
-            <button class="currency-button-unique currency-dropdown-trigger" onclick="handleCurrencyToggle('currencyDropdown-v3', this)">
+            <button id="currency-toggle-button" class="currency-button-unique">
                 <span>USD ▾</span>
             </button>
             <div id="currencyDropdown-v3" class="currency-dropdown-unique">
-                <ul class="currency-dropdown-inner-unique">
-                    <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="USD">USD</a></li>
-                    <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="EUR">EUR</a></li>
-                    <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="CAD">CAD</a></li>
-                    <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="GBP">GBP</a></li>
-                    <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="AUD">AUD</a></li>
-                    <li class="currency-dropdown-item-unique"><a class="currency-dropdown-link-unique" href="#" data-currency="NZD">NZD</a></li>
+                <ul>
+                    <li><a href="#" data-currency="USD">USD</a></li>
+                    <li><a href="#" data-currency="EUR">EUR</a></li>
+                    <li><a href="#" data-currency="CAD">CAD</a></li>
+                    <li><a href="#" data-currency="GBP">GBP</a></li>
+                    <li><a href="#" data-currency="AUD">AUD</a></li>
+                    <li><a href="#" data-currency="NZD">NZD</a></li>
                 </ul>
             </div>
         </div>
     </div>
-
-    <!-- Column 2: Quick Links -->
     <div class="footer-column-v3">
       <h3 class="column-title-v3">Quick Links</h3>
       <ul>
@@ -293,8 +289,6 @@
         <li><a href="/">Home</a></li>
       </ul>
     </div>
-
-    <!-- Column 3: Policies -->
     <div class="footer-column-v3">
       <h3 class="column-title-v3">Policies</h3>
       <ul>
@@ -303,14 +297,12 @@
         <li><a href="/pages/returns-faq">Returns & FAQ</a></li>
       </ul>
     </div>
-
-    <!-- Column 4: Stay Connected -->
     <div class="footer-column-v3">
       <h3 class="column-title-v3">Stay Connected</h3>
       <p class="newsletter-text-v3">
         Join our newsletter for exclusive deals and 10% off your first order.
       </p>
-      <form class="newsletter-form-v3" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe" onsubmit="handleNewsletterSubmit(event)">
+      <form id="newsletter-form" class="newsletter-form-v3" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe">
         <input type="email" name="EMAIL" class="newsletter-input-v3" placeholder="Your email address" required>
         <div class="visually-hidden" aria-hidden="true"><input type="text" name="b_cbbfe1d906378ad9ed06537c9_9cf73c7e37" tabindex="-1" value=""></div>
         <button type="submit" class="newsletter-button-v3">Join</button>
@@ -327,7 +319,6 @@
     </div>
   </div>
 
-  <!-- Bottom Section with payment and copyright -->
   <div class="footer-bottom-v3">
       <div class="footer-payment-icons-v3">
           <img src="https://raw.githubusercontent.com/wazilbedri/p/main/amx.svg" alt="American Express">
@@ -346,92 +337,78 @@
 
 <!-- Step 3: JavaScript for Currency Selector and Newsletter -->
 <script>
-    // --- Attaching functions to the window object to make them globally accessible ---
-    // This is the key fix for the newsletter and currency functions not working on the live site.
-    let activeCurrencyDropdownId = null;
-    let activeCurrencyToggleButton = null;
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- Currency Dropdown Functionality ---
+    const currencyButton = document.getElementById('currency-toggle-button');
+    const currencyDropdown = document.getElementById('currencyDropdown-v3');
 
-    window.handleCurrencyToggle = function(dropdownId, buttonElement) {
-        const dropdown = document.getElementById(dropdownId);
-        if (dropdown) {
-            const isCurrentlyOpen = dropdown.style.display === 'block';
-            if (isCurrentlyOpen) {
-                dropdown.style.display = 'none';
-                if (activeCurrencyDropdownId === dropdownId) {
-                    activeCurrencyDropdownId = null;
-                    activeCurrencyToggleButton = null;
+    if(currencyButton && currencyDropdown) {
+        currencyButton.addEventListener('click', function() {
+            const isCurrentlyOpen = currencyDropdown.style.display === 'block';
+            currencyDropdown.style.display = isCurrentlyOpen ? 'none' : 'block';
+        });
+
+        currencyDropdown.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                const currency = e.target.getAttribute('data-currency');
+                const buttonSpan = currencyButton.querySelector('span');
+                if (buttonSpan) {
+                    buttonSpan.textContent = currency + ' ▾';
                 }
-            } else {
-                if (activeCurrencyDropdownId && activeCurrencyDropdownId !== dropdownId) {
-                    document.getElementById(activeCurrencyDropdownId).style.display = 'none';
-                }
-                dropdown.style.display = 'block';
-                activeCurrencyDropdownId = dropdownId;
-                activeCurrencyToggleButton = buttonElement;
+                currencyDropdown.style.display = 'none';
+                
+                const currentPath = window.location.pathname + window.location.search;
+                const redirectUrl = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPath)}`;
+                console.log("Currency selected. Would redirect to: " + redirectUrl);
+                // window.location.href = redirectUrl; // UNCOMMENT TO ENABLE
             }
-        }
+        });
     }
 
-    // This listener makes the currency links in the dropdown work
+    // --- Newsletter Form Submission ---
+    const newsletterForm = document.getElementById('newsletter-form');
+    if(newsletterForm) {
+        newsletterForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            // The form still needs a target iframe to submit to Mailchimp silently
+            const iframe = document.querySelector('iframe[name="hidden_iframe"]');
+            if(iframe) {
+                form.submit();
+            }
+
+            const message = document.getElementById('success-message-v3');
+            if (message) {
+                message.style.display = 'block';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 5000);
+            }
+            form.reset();
+        });
+    }
+    
+    // --- Close dropdown when clicking outside ---
     document.addEventListener('click', function(e) {
-        if (e.target.matches('.currency-dropdown-link-unique')) {
-            e.preventDefault();
-            const currency = e.target.getAttribute('data-currency');
-            const button = document.querySelector('.currency-button-unique span');
-            if (button) {
-                button.textContent = currency + ' ▾';
-            }
-            const dropdown = e.target.closest('.currency-dropdown-unique');
-            if (dropdown) {
-                dropdown.style.display = 'none';
-            }
-            activeCurrencyDropdownId = null;
-            activeCurrencyToggleButton = null;
-
-            const currentPath = window.location.pathname + window.location.search;
-            const redirectUrl = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPath)}`;
-            console.log("Currency selected. Would redirect to: " + redirectUrl);
-            // window.location.href = redirectUrl; // UNCOMMENT THIS LINE TO ENABLE REDIRECTION
-        } else if (activeCurrencyDropdownId && activeCurrencyToggleButton) {
-            const dropdown = document.getElementById(activeCurrencyDropdownId);
-            if (dropdown && !dropdown.contains(e.target) && !activeCurrencyToggleButton.contains(e.target)) {
-                dropdown.style.display = 'none';
-                activeCurrencyDropdownId = null;
-                activeCurrencyToggleButton = null;
+        if(currencyButton && currencyDropdown) {
+            if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
+                currencyDropdown.style.display = 'none';
             }
         }
     });
-
-    let newsletterSuccessMessageTimer = null;
-    window.handleNewsletterSubmit = function(event) {
-        event.preventDefault();
-        const form = event.target;
-        form.submit(); // Submits silently to Mailchimp via iframe
-
-        const message = document.getElementById('success-message-v3');
-        if (message) {
-            message.style.display = 'block';
-            if (newsletterSuccessMessageTimer) {
-                clearTimeout(newsletterSuccessMessageTimer);
-            }
-            newsletterSuccessMessageTimer = setTimeout(() => {
-                message.style.display = 'none';
-            }, 5000);
+    
+    // --- Failsafe to hide the default footer ---
+    const hideDefaultFooter = () => {
+        const defaultFooter = document.getElementById('fw-section-footer');
+        if (defaultFooter) {
+            defaultFooter.style.display = 'none';
         }
-        form.reset();
-    }
-</script>
+    };
+    hideDefaultFooter();
+    setTimeout(hideDefaultFooter, 500);
 
-<!-- Step 4: JavaScript Failsafe to hide the default footer -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const hideDefaultFooter = () => {
-            const defaultFooter = document.getElementById('fw-section-footer');
-            if (defaultFooter) {
-                defaultFooter.style.display = 'none';
-            }
-        };
-        hideDefaultFooter();
-        setTimeout(hideDefaultFooter, 500);
-    });
+});
 </script>
