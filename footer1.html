@@ -3,8 +3,8 @@
 <!-- ============================================================================== -->
 <!-- 
   INSTRUCTIONS:
-  1. This is a brand new, self-contained footer based on your latest image.
-  2. Place this entire code block into your website's custom FOOTER injection area.
+  1. This is the new footer design with the working JavaScript from your original file integrated.
+  2. This is a complete, self-contained block. Place it in your footer injection area.
 -->
 
 <!-- Step 1: All necessary CSS for styling and positioning -->
@@ -97,40 +97,39 @@
       font-size: 1.2rem;
   }
   
-  /* --- Newsletter for new design (UPDATED) --- */
+  /* --- Newsletter for new design --- */
   .footer-column-v4 .newsletter-form-v4 {
-    /* Form container no longer needs flex or border */
     width: 100%;
   }
 
   .footer-column-v4 .newsletter-input-v4 {
     border: none;
-    border-bottom: 1px solid #333; /* Line is on the input now */
+    border-bottom: 1px solid #333;
     background-color: transparent;
     color: #000;
-    padding: 12px 0; /* Adjusted padding */
+    padding: 12px 0;
     outline: none;
     font-size: 0.9rem;
-    width: 100%; /* Make input full width of its container */
+    width: 100%;
     box-sizing: border-box;
   }
   .footer-column-v4 .newsletter-input-v4::placeholder {
-      color: #777; /* Lighter placeholder text */
+      color: #777;
   }
 
   .footer-column-v4 .newsletter-button-v4 {
-    background-color: #212121; /* Darker button background */
+    background-color: #212121;
     color: #fff;
     border: none;
-    padding: 12px 30px; /* Adjusted padding */
+    padding: 12px 30px;
     cursor: pointer;
     font-weight: bold;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1.2px;
     transition: background-color 0.3s ease;
-    width: 100%; /* Make button full width */
-    margin-top: 20px; /* Space between input and button */
+    width: 100%;
+    margin-top: 20px;
   }
   .footer-column-v4 .newsletter-button-v4:hover {
       background-color: #000;
@@ -154,13 +153,46 @@
     margin: 0 auto;
   }
   
+  /* --- Currency Selector Styles from original file --- */
   .footer-currency-v4 {
+    position: relative;
+  }
+  .currency-button-v4 {
     border: 1px solid #dcd1c0;
     padding: 8px 12px;
     font-size: 0.9rem;
     cursor: pointer;
+    background-color: transparent;
+    color: #333;
   }
-  
+  .currency-dropdown-v4 {
+    display: none;
+    position: absolute;
+    bottom: 100%; /* Position above button */
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #dcd1c0;
+    min-width: 100px;
+    z-index: 1000;
+    margin-bottom: 5px;
+  }
+  .currency-dropdown-v4 ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .currency-dropdown-v4 li a {
+    display: block;
+    padding: 8px 12px;
+    color: #333;
+    text-decoration: none;
+  }
+  .currency-dropdown-v4 li a:hover {
+      background-color: #f0f0f0;
+  }
+
   .footer-copyright-v4 {
     font-size: 0.8rem;
     color: #555;
@@ -187,6 +219,8 @@
     .custom-footer-grid-v4 {
         grid-template-columns: 1fr; 
         text-align: center;
+        border-bottom: none;
+        padding-bottom: 20px;
     }
     .footer-column-v4 ul {
         margin-bottom: 20px;
@@ -198,6 +232,7 @@
       flex-direction: column;
       justify-content: center;
       text-align: center;
+      border-top: 1px solid #dcd1c0;
     }
     .footer-copyright-v4 {
         order: 3; 
@@ -267,10 +302,20 @@
   <!-- Bottom Section -->
   <div class="footer-bottom-v4">
       <div class="footer-currency-v4">
-          <span>🇺🇸 USD $</span>
+          <button id="currency-toggle-button" class="currency-button-v4">
+              <span>🇺🇸 USD $ ▾</span>
+          </button>
+          <div id="currency-dropdown-v4" class="currency-dropdown-v4">
+              <ul>
+                  <li><a href="#" data-currency="USD">USD</a></li>
+                  <li><a href="#" data-currency="EUR">EUR</a></li>
+                  <li><a href="#" data-currency="CAD">CAD</a></li>
+                  <!-- Add other currencies as needed -->
+              </ul>
+          </div>
       </div>
       <div class="footer-copyright-v4">
-        &copy; 2025 Your Brand Name. All Rights Reserved.
+        &copy; 2025 WarmQuote. All Rights Reserved.
       </div>
       <div class="footer-payment-icons-v4">
           <img src="https://raw.githubusercontent.com/wazilbedri/p/main/amx.svg" alt="American Express">
@@ -289,16 +334,44 @@
 // This function runs our main code once the elements are on the page.
 function initializeFooter() {
     // --- Define Elements ---
+    const currencyButton = document.getElementById('currency-toggle-button');
+    const currencyDropdown = document.getElementById('currency-dropdown-v4');
     const newsletterForm = document.getElementById('newsletter-form-v4');
     const successMessage = document.getElementById('success-message-v4');
 
     // --- Check if elements exist ---
-    if (!newsletterForm) {
-        console.log("Waiting for new footer elements...");
+    if (!currencyButton || !currencyDropdown || !newsletterForm) {
+        console.log("Waiting for footer elements to appear...");
         return; // Exit and wait for the observer to try again.
     }
     
     console.log("New footer elements found! Initializing...");
+
+    // --- Currency Dropdown Functionality ---
+    currencyButton.addEventListener('click', function() {
+        const isCurrentlyOpen = currencyDropdown.style.display === 'block';
+        currencyDropdown.style.display = isCurrentlyOpen ? 'none' : 'block';
+    });
+
+    currencyDropdown.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') {
+            e.preventDefault();
+            const currency = e.target.getAttribute('data-currency');
+            const buttonSpan = currencyButton.querySelector('span');
+            if (buttonSpan) {
+                // Keep the flag emoji
+                buttonSpan.innerHTML = `🇺🇸 ${currency} $ ▾`;
+            }
+            currencyDropdown.style.display = 'none';
+        }
+    });
+    
+    // --- Close dropdown when clicking outside ---
+    document.addEventListener('click', function(e) {
+        if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
+            currencyDropdown.style.display = 'none';
+        }
+    });
 
     // --- Newsletter Form Submission ---
     newsletterForm.addEventListener('submit', function(event) {
