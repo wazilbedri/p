@@ -4,7 +4,7 @@
 <!-- 
   INSTRUCTIONS:
   1. This is a complete, self-contained footer, redesigned to match your image
-     and with the functionality from your original file integrated.
+     and with all functionality and layout issues corrected.
   2. Place this entire code block into your website's custom FOOTER injection area.
 -->
 
@@ -227,21 +227,34 @@
       border: 0;
   }
 
-  /* --- Mobile-specific centering --- */
+  /* --- Mobile-specific centering and ordering --- */
   @media (max-width: 767px) {
+    .custom-footer-grid-v3 {
+        grid-template-columns: 1fr; /* Force a single column layout */
+    }
+    .footer-column-v3 {
+        text-align: left; /* Set default alignment to left for columns */
+    }
+    /* This rule specifically targets the first column (currency) and centers it */
     .custom-footer-grid-v3 .footer-column-v3:first-child {
         text-align: center;
     }
     .footer-socials-v3 {
-        justify-content: center; /* Center the social icons */
+        justify-content: center; /* Align social icons to the left */
     }
     .footer-bottom-v3 {
-      flex-direction: column-reverse; /* Stack copyright on top of payment icons */
+      flex-direction: column; /* Stack vertically */
       justify-content: center;   /* Center the stacked items */
       text-align: center;
     }
     .footer-payment-icons-v3 {
-        order: -1; 
+      justify-content: center; /* Center the payment icons container */
+    }
+    .footer-copyright-v3 {
+        order: 2; 
+    }
+    .footer-payment-icons-v3 {
+        order: 1; 
     }
   }
 
@@ -331,13 +344,14 @@
   </div>
 </footer>
 
-<!-- Step 3: JavaScript for Currency Selector and Newsletter (from footer1orginal.html) -->
+<!-- Step 3: JavaScript for Currency Selector and Newsletter -->
 <script>
-    // --- Currency Dropdown Functionality ---
+    // --- Attaching functions to the window object to make them globally accessible ---
+    // This is the key fix for the newsletter and currency functions not working on the live site.
     let activeCurrencyDropdownId = null;
     let activeCurrencyToggleButton = null;
 
-    function handleCurrencyToggle(dropdownId, buttonElement) {
+    window.handleCurrencyToggle = function(dropdownId, buttonElement) {
         const dropdown = document.getElementById(dropdownId);
         if (dropdown) {
             const isCurrentlyOpen = dropdown.style.display === 'block';
@@ -358,7 +372,7 @@
         }
     }
 
-    // This listener replaces setCurrency() and makes the links in the dropdown work
+    // This listener makes the currency links in the dropdown work
     document.addEventListener('click', function(e) {
         if (e.target.matches('.currency-dropdown-link-unique')) {
             e.preventDefault();
@@ -367,7 +381,6 @@
             if (button) {
                 button.textContent = currency + ' ▾';
             }
-            // Close the dropdown
             const dropdown = e.target.closest('.currency-dropdown-unique');
             if (dropdown) {
                 dropdown.style.display = 'none';
@@ -375,7 +388,6 @@
             activeCurrencyDropdownId = null;
             activeCurrencyToggleButton = null;
 
-            // This is where you would redirect the user for the currency change
             const currentPath = window.location.pathname + window.location.search;
             const redirectUrl = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPath)}`;
             console.log("Currency selected. Would redirect to: " + redirectUrl);
@@ -390,10 +402,8 @@
         }
     });
 
-    // --- Newsletter Form Submission ---
     let newsletterSuccessMessageTimer = null;
-
-    function handleNewsletterSubmit(event) {
+    window.handleNewsletterSubmit = function(event) {
         event.preventDefault();
         const form = event.target;
         form.submit(); // Submits silently to Mailchimp via iframe
@@ -414,21 +424,14 @@
 
 <!-- Step 4: JavaScript Failsafe to hide the default footer -->
 <script>
-    // This script is a failsafe to ensure the default platform footer is hidden.
-    // It runs after the page is loaded and forcefully removes the default footer element.
     document.addEventListener('DOMContentLoaded', function() {
         const hideDefaultFooter = () => {
             const defaultFooter = document.getElementById('fw-section-footer');
             if (defaultFooter) {
                 defaultFooter.style.display = 'none';
-                console.log('Default footer hidden by failsafe script.');
             }
         };
-
-        // Run the hide function immediately when the DOM is ready
         hideDefaultFooter();
-
-        // Also run it after a short delay to catch dynamically loaded elements
         setTimeout(hideDefaultFooter, 500);
     });
 </script>
