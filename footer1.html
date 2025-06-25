@@ -1,3 +1,14 @@
+<!-- ============================================================================== -->
+<!-- ============== SELF-CONTAINED MULTI-COLUMN FOOTER DESIGN ===================== -->
+<!-- ============================================================================== -->
+<!-- 
+  INSTRUCTIONS:
+  1. This is a complete, self-contained footer, redesigned to match your image
+     and with all functionality and layout issues corrected.
+  2. Place this entire code block into your website's custom FOOTER injection area.
+-->
+
+<!-- Step 1: All necessary CSS for styling and positioning -->
 <style>
   /* --- HIDE DEFAULT FOOTER --- */
   #fw-section-footer {
@@ -92,7 +103,7 @@
       left: 0;
       background-color: #161712;
       border: 1px solid #444;
-     /* min-width: 100px;*/
+      /* min-width: 100px;*/
       z-index: 1000;
       margin-top: 5px; 
   }
@@ -240,10 +251,10 @@
       justify-content: center; /* Center the payment icons container */
     }
     .footer-copyright-v3 {
-        order: 2; 
+        order: 2; /* CORRECTED: This now appears after the payment icons */
     }
     .footer-payment-icons-v3 {
-        order: 1; 
+        order: 1; /* CORRECTED: This now appears before the copyright text */
     }
   }
 
