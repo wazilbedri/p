@@ -1,4 +1,3 @@
-
 <style>
   /* --- HIDE DEFAULT FOOTER --- */
   #fw-section-footer {
@@ -62,6 +61,11 @@
       color: #555;
       line-height: 1.6;
       margin: 0 0 25px 0;
+  }
+  
+  .footer-column-v5.about-us-column {
+      display: flex;
+      flex-direction: column;
   }
 
   .footer-column-v5 ul {
@@ -146,6 +150,18 @@
       font-size: 0.9rem;
   }
   
+  .captcha-notice-v5 {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: #6a6a6a;
+      margin-top: 15px;
+      line-height: 1.5;
+  }
+  .captcha-notice-v5 a {
+      color: inherit;
+      text-decoration: underline;
+  }
+  
   .footer-bottom-v5 {
     display: flex;
     justify-content: space-between;
@@ -157,10 +173,10 @@
     margin: 0 auto;
   }
   
-  .currency-container-unique {
+  .currency-selector-v5 {
     position: relative;
   }
-  .currency-button-unique {
+  .currency-button-v5 {
     border: 1px solid #dcd1c0;
     padding: 8px 12px;
     font-size: 0.9rem;
@@ -168,7 +184,7 @@
     background-color: transparent;
     color: #333;
   }
-  .currency-dropdown-unique {
+  .currency-dropdown-v5 {
     display: none;
     position: absolute;
     bottom: 100%; /* Position above button */
@@ -179,24 +195,20 @@
     z-index: 1000;
     margin-bottom: 5px;
   }
-  .currency-dropdown-unique ul {
+  .currency-dropdown-v5 ul {
     list-style: none;
     margin: 0;
     padding: 5px;
     max-height: 200px;
     overflow-y: auto;
   }
-  .currency-dropdown-unique li {
-    padding: 0;
-    margin: 0;
-  }
-  .currency-dropdown-unique .currency-dropdown-link-unique {
+  .currency-dropdown-v5 li a {
     display: block;
     padding: 8px 12px;
     color: #333;
     text-decoration: none;
   }
-  .currency-dropdown-unique .currency-dropdown-link-unique:hover {
+  .currency-dropdown-v5 li a:hover {
       background-color: #f0f0f0;
   }
 
@@ -246,21 +258,46 @@
     }
     .footer-copyright-v5 { order: 3; }
     .footer-payment-icons-v5 { order: 2; }
-    .currency-container-unique { order: 1; }
+    .currency-selector-v5 { order: 1; }
+    
+    .footer-logo-v5 {
+        order: 1;
+        margin-bottom: 25px;
+        margin-top: 0;
+    }
+    .about-us-column .column-title-v5 {
+        order: 2;
+    }
+    .about-us-column .about-text {
+        order: 3;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .footer-logo-v5 {
+        order: 3;
+        margin-top: 25px;
+        margin-bottom: 0;
+    }
+    .about-us-column .column-title-v5 {
+        order: 1;
+    }
+    .about-us-column .about-text {
+        order: 2;
+    }
   }
 </style>
 
-<!-- Step 2: The HTML for the new footer design -->
 <footer class="custom-footer-container-v5">
   <div class="custom-footer-grid-v5">
     <div class="footer-column-v5 about-us-column">
+      <div class="footer-logo-v5">
+          <img src="https://raw.githubusercontent.com/wazilbedri/w/main/logob.svg" alt="WarmQuote Logo">
+      </div>
       <h3 class="column-title-v5">About Us</h3>
       <p class="about-text">
         We create high-quality apparel with inspirational quotes to help you wear your motivation and spread positivity everywhere you go.
       </p>
-      <div class="footer-logo-v5">
-          <img src="https://raw.githubusercontent.com/wazilbedri/w/main/logob.svg" alt="WarmQuote Logo">
-      </div>
     </div>
 
     <div class="footer-column-v5">
@@ -295,32 +332,33 @@
       <p class="newsletter-text" style="margin-top: 25px;">
         Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.
       </p>
-      <!-- ADDED onsubmit attribute to connect to the JS -->
-      <form id="newsletter-form-v5" class="newsletter-form-v5" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe_v5" onsubmit="handleNewsletterSubmit(event, 'v5')">
+      <form id="newsletter-form-v5" class="newsletter-form-v5" action="https://warmquote.us7.list-manage.com/subscribe/post?u=cbbfe1d906378ad9ed06537c9&id=9cf73c7e37" method="POST" target="hidden_iframe_v5">
         <input type="email" name="EMAIL" class="newsletter-input-v5" placeholder="Email" required>
         <button type="submit" class="newsletter-button-v5">Join</button>
       </form>
+      <div class="captcha-notice-v5">
+          Your privacy matters to us. You can find out how we use your information by reviewing our <a href="/pages/privacy-policy">Privacy Policy</a>.
+      </div>
       <p id="success-message-v5" class="newsletter-success-message-v5" style="display:none;">Thanks for subscribing!</p>
       <iframe name="hidden_iframe_v5" title="Hidden Iframe for Newsletter" style="display:none;"></iframe>
     </div>
   </div>
 
   <div class="footer-bottom-v5">
-      <div class="currency-container-unique">
-          <!-- ADDED onclick attribute to connect to the JS -->
-          <button id="currency-toggle-button-v5" class="currency-button-unique" onclick="handleCurrencyToggle('currency-dropdown-v5', this)">
+      <div class="currency-selector-v5">
+          <button id="currency-toggle-button-v5" class="currency-button-v5">
               <span>USD ▾</span>
           </button>
-          <div id="currency-dropdown-v5" class="currency-dropdown-unique">
+          <div id="currency-dropdown-v5" class="currency-dropdown-v5">
               <ul>
-                  <li><a href="#" class="currency-dropdown-link-unique" data-currency="USD">USD</a></li>
-                  <li><a href="#" class="currency-dropdown-link-unique" data-currency="EUR">EUR</a></li>
-                  <li><a href="#" class="currency-dropdown-link-unique" data-currency="CAD">CAD</a></li>
+                  <li><a href="#" data-currency="USD">USD</a></li>
+                  <li><a href="#" data-currency="EUR">EUR</a></li>
+                  <li><a href="#" data-currency="CAD">CAD</a></li>
               </ul>
           </div>
       </div>
       <div class="footer-copyright-v5">
-        &copy; 2025 WarmQuote. All Rights Reserved.
+        © 2025 WarmQuote. All Rights Reserved.
       </div>
       <div class="footer-payment-icons-v5">
           <img src="https://raw.githubusercontent.com/wazilbedri/p/main/amx.svg" alt="American Express">
@@ -334,83 +372,72 @@
   </div>
 </footer>
 
-<!-- Step 3: The Robust JavaScript Solution from your original working file -->
 <script>
-    // --- Attaching functions to the window object to make them globally accessible ---
-    // This is the key fix for the onclick/onsubmit attributes not working on the live site.
-    let activeCurrencyDropdownId = null;
-    let activeCurrencyToggleButton = null;
+function initializeFooter() {
+    const currencyButton = document.getElementById('currency-toggle-button-v5');
+    const currencyDropdown = document.getElementById('currency-dropdown-v5');
+    const newsletterForm = document.getElementById('newsletter-form-v5');
+    const successMessage = document.getElementById('success-message-v5');
 
-    window.handleCurrencyToggle = function(dropdownId, buttonElement) {
-        const dropdown = document.getElementById(dropdownId);
-        if (dropdown) {
-            const isCurrentlyOpen = dropdown.style.display === 'block';
-            if (isCurrentlyOpen) {
-                dropdown.style.display = 'none';
-                activeCurrencyDropdownId = null;
-                activeCurrencyToggleButton = null;
-            } else {
-                if (activeCurrencyDropdownId) {
-                    document.getElementById(activeCurrencyDropdownId).style.display = 'none';
-                }
-                dropdown.style.display = 'block';
-                activeCurrencyDropdownId = dropdownId;
-                activeCurrencyToggleButton = buttonElement;
-            }
-        }
-    };
+    if (!currencyButton || !currencyDropdown || !newsletterForm) {
+        return; 
+    }
     
-    // Global listener to close dropdowns when clicking outside
-    document.addEventListener('click', function(e) {
-        if (activeCurrencyDropdownId && activeCurrencyToggleButton) {
-            const dropdown = document.getElementById(activeCurrencyDropdownId);
-            if (dropdown && !dropdown.contains(e.target) && !activeCurrencyToggleButton.contains(e.target)) {
-                dropdown.style.display = 'none';
-                activeCurrencyDropdownId = null;
-                activeCurrencyToggleButton = null;
+    // --- Currency Dropdown Functionality ---
+    currencyButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isCurrentlyOpen = currencyDropdown.style.display === 'block';
+        currencyDropdown.style.display = isCurrentlyOpen ? 'none' : 'block';
+    });
+
+    currencyDropdown.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') {
+            e.preventDefault();
+            const currency = e.target.getAttribute('data-currency');
+            const buttonSpan = currencyButton.querySelector('span');
+            if (buttonSpan) {
+                buttonSpan.innerHTML = `🇺🇸 ${currency} $ ▾`;
             }
+            currencyDropdown.style.display = 'none';
         }
     });
 
-    // Make the currency links work
-    document.querySelectorAll('.currency-dropdown-link-unique').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const currency = this.getAttribute('data-currency');
-            const button = this.closest('.currency-container-unique').querySelector('.currency-button-unique span');
-            if(button) {
-                button.innerHTML = `🇺🇸 ${currency} $ ▾`;
-            }
-            this.closest('.currency-dropdown-unique').style.display = 'none';
-            activeCurrencyDropdownId = null;
-            activeCurrencyToggleButton = null;
-        });
+    document.addEventListener('click', function(e) {
+        if (!currencyButton.contains(e.target) && !currencyDropdown.contains(e.target)) {
+            currencyDropdown.style.display = 'none';
+        }
     });
 
-    let newsletterSuccessMessageTimers = {};
-    window.handleNewsletterSubmit = function(event, type) {
+    // --- Newsletter Form Submission ---
+    newsletterForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const form = event.target;
         form.submit();
 
-        const message = document.getElementById(`success-message-${type}`);
-        if (message) {
-            message.style.display = 'block';
-            if (newsletterSuccessMessageTimers[type]) {
-                clearTimeout(newsletterSuccessMessageTimers[type]);
-            }
-            newsletterSuccessMessageTimers[type] = setTimeout(() => {
-                message.style.display = 'none';
+        if (successMessage) {
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
             }, 5000);
         }
         form.reset();
-    };
-
-    // --- Failsafe to hide the default footer ---
-    document.addEventListener('DOMContentLoaded', function() {
-        const defaultFooter = document.getElementById('fw-section-footer');
-        if (defaultFooter) {
-            defaultFooter.style.display = 'none';
-        }
     });
+    
+    const defaultFooter = document.getElementById('fw-section-footer');
+    if (defaultFooter) {
+        defaultFooter.style.display = 'none';
+    }
+
+    if (window.footerObserver) {
+        window.footerObserver.disconnect();
+    }
+}
+
+window.footerObserver = new MutationObserver(initializeFooter);
+window.footerObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+document.addEventListener('DOMContentLoaded', initializeFooter);
 </script>
