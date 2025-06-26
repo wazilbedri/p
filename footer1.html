@@ -1,4 +1,3 @@
-
 <style>
   /* --- HIDE DEFAULT FOOTER --- */
   #fw-section-footer {
@@ -84,12 +83,37 @@
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.3s ease;
+    position: relative;
+    padding-bottom: 5px; 
   }
 
+  /* UPDATED: Removed the animation property, leaving only the color change */
   .footer-column-v5 ul li a:hover {
     color: #000;
   }
+
+  /* UPDATED: This now uses transform:scaleX() for the animation */
+  .footer-column-v5 ul li a::after {
+    content: '';
+    position: absolute;
+    width: 100%; /* Line is always 100% width */
+    height: 1px;
+    background-color: #000;
+    bottom: 0;
+    left: 0;
+    transform: scaleX(0); /* Initially scaled to be invisible */
+    transform-origin: right; /* Set the origin to the right for the "un-hover" animation */
+    transition: transform 0.4s ease-in-out; /* Animate the transform property */
+  }
+
+  /* UPDATED: On hover, we change the transform-origin and scale it to full size */
+  .footer-column-v5 ul li a:hover::after {
+    transform: scaleX(1); /* Scale to full width on hover */
+    transform-origin: left; /* Set the origin to the left for the "hover" animation */
+  }
   
+  /* REMOVED: The entire @keyframes glitch block has been deleted */
+
   .footer-logo-v5 {
       width: 80px;
   }
@@ -145,11 +169,6 @@
       background-color: #000;
   }
   
-  .newsletter-success-message-v5 {
-      color: #555;
-      margin-top: 15px;
-      font-size: 0.9rem;
-  }
   
   .captcha-notice-v5 {
       font-size: 0.8rem;
@@ -157,6 +176,7 @@
       color: #6a6a6a;
       margin-top: 15px;
       line-height: 1.5;
+      margin-bottom: -11;
   }
   .captcha-notice-v5 a {
       color: inherit;
@@ -257,10 +277,19 @@
     .footer-bottom-v5 {
       flex-direction: column;
       border-top: 1px solid #dcd1c0;
+      margin-bottom: 0;
     }
     .footer-copyright-v5 { order: 3; }
     .footer-payment-icons-v5 { order: 2; }
     .currency-container-unique { order: 1; }
+
+
+    .newsletter-success-message-v5 {
+    color: #555;
+    margin-top: 50px;
+    font-size: 0.9rem;
+    text-align: center;
+   }
     
     .footer-logo-v5 {
         order: 1;
@@ -273,9 +302,18 @@
     .about-us-column .about-text {
         order: 3;
     }
+    
   }
   
   @media (min-width: 768px) {
+
+
+    .newsletter-success-message-v5 {
+    color: #555;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+   }
     .footer-logo-v5 {
         order: 3;
         margin-top: 25px;
@@ -341,7 +379,7 @@
         <button type="submit" class="newsletter-button-v5">Join</button>
       </form>
       <div class="captcha-notice-v5">
-          Your privacy matters to us. You can find out how we use your information by reviewing our <a href="/pages/privacy-policy">Privacy Policy</a>.
+         You can find out how we use your information by reviewing our <a href="/pages/privacy-policy">Privacy Policy</a>.
       </div>
       <p id="success-message-v5" class="newsletter-success-message-v5" style="display:none;">Thanks for subscribing!</p>
       <iframe name="hidden_iframe_v5" title="Hidden Iframe for Newsletter" style="display:none;"></iframe>
