@@ -194,6 +194,10 @@
     max-width: 1200px;
     margin: 0 auto;
   }
+
+  .currency-container-unique {
+  display: none;
+}
   
   .currency-container-unique {
     position: relative;
@@ -211,7 +215,7 @@
     position: absolute;
     bottom: 100%; /* Position above button */
     left: 0;
-    background-color: #f5f0e9;
+    background-color: #fff;
     border: 1px solid #dcd1c0;
     /*min-width: 100px;*/
     z-index: 1000;
@@ -235,7 +239,7 @@
     text-decoration: none;
   }
   .currency-dropdown-unique .currency-dropdown-link-unique:hover {
-      background-color: #ffffff;
+      background-color: #f0f0f0;
   }
 
   .footer-copyright-v5 {
@@ -259,11 +263,7 @@
       overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
   }
 
-  @media (max-width: 990px) {
-    .footer-bottom-v5 {
-        justify-content: center;
-    }
-  }
+  
 
   @media (max-width: 767px) {
     .custom-footer-grid-v5 {
@@ -308,11 +308,17 @@
   
   @media (min-width: 768px) {
 
+    @media (max-width: 767px) {
+  .currency-container-unique {
+    display: block;
+  }
+}
+
     .currency-dropdown-unique ul {
     list-style: none;
     margin: 0;
     padding: 5px;
-    max-height: 160px;
+    max-height: 150px;
     overflow-y: auto;
   }
 
@@ -334,6 +340,11 @@
         order: 2;
     }
   }
+  @media (max-width: 692px) {
+  .currency-container-unique {
+    display: block;
+  }
+}
 </style>
 
 <!-- Step 2: The HTML for the new footer design -->
@@ -469,19 +480,18 @@
     });
 
     // Make the currency links work
-    document.querySelectorAll('.currency-dropdown-link-unique').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const currency = this.getAttribute('data-currency');
-            const button = this.closest('.currency-container-unique').querySelector('.currency-button-unique span');
-            if(button) {
-                button.innerHTML = ` ${currency} ▾`;
-            }
-            this.closest('.currency-dropdown-unique').style.display = 'none';
-            activeCurrencyDropdownId = null;
-            activeCurrencyToggleButton = null;
-        });
-    });
+
+document.addEventListener('DOMContentLoaded', function () {
+  const links = document.querySelectorAll('.currency-dropdown-link-unique');
+  links.forEach(link => {
+    const currency = link.getAttribute('data-currency');
+    const currentPath = window.location.pathname + window.location.search;
+    const newHref = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPath)}`;
+    link.setAttribute('href', newHref);
+  });
+});
+
+
 
     let newsletterSuccessMessageTimers = {};
     window.handleNewsletterSubmit = function(event, type) {
@@ -511,3 +521,24 @@
     });
 </script>
 
+<script>
+  // Helper to read cookie value
+  function getCookie(name) {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    let currency = getCookie('currency');
+    
+    if (!currency) {
+      currency = 'USD';
+    }
+    
+    const buttonSpan = document.querySelector('.currency-button-unique span');
+    if (buttonSpan) {
+      buttonSpan.textContent = `${currency} ▾`;
+    }
+  });
+  </script>
