@@ -498,21 +498,12 @@
         form.reset();
     };
 
-    // --- Logic to initialize the footer once it's injected into the page ---
-    function initInjectedFooter() {
-        // Find the main container for the currency selector.
-        // If it's not in the DOM yet, exit and wait for the next interval check.
-        const currencyContainer = document.querySelector('.currency-container-unique');
-        if (!currencyContainer) {
-            return;
-        }
-
-        // --- SUCCESS: The footer has been found. ---
-        // 1. Clear the interval so this function doesn't run again.
-        clearInterval(footerInitInterval);
-
-        // 2. Run all the setup logic now.
+    // --- Core logic to initialize the footer once it's injected ---
+    function initializeFooterLogic() {
         try {
+            const currencyContainer = document.querySelector('.currency-container-unique');
+            if (!currencyContainer) return;
+
             // Failsafe to hide the default footer
             const defaultFooter = document.getElementById('fw-section-footer');
             if (defaultFooter) {
@@ -530,7 +521,7 @@
             const currencyButtonSpan = currencyContainer.querySelector('.currency-button-unique span');
             const currencyLinks = currencyContainer.querySelectorAll('.currency-dropdown-link-unique');
 
-            // --- FIX FOR PROBLEM 2: Update button to show the active currency on page load ---
+            // --- FIX 2: Update button to show the active currency ---
             let activeCurrency = 'USD'; // Default
             if (typeof Shopify !== 'undefined' && Shopify.currency && Shopify.currency.active) {
                 activeCurrency = Shopify.currency.active;
@@ -544,24 +535,48 @@
                 currencyButtonSpan.textContent = `${activeCurrency} ▾`;
             }
 
-            // --- FIX FOR PROBLEM 1: Update currency links to return to the current page ---
+            // --- FIX 1: Update currency links to return to the current page ---
             const currentPagePath = window.location.pathname + window.location.search;
             currencyLinks.forEach(link => {
-                const currency = link.getAttribute('data-currency');
-                if (currency) {
-                    // Reconstruct the URL safely without relying on new URL() constructor,
-                    // and ensure the path is correctly encoded.
-                    const newHref = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPagePath)}`;
-                    link.setAttribute('href', newHref);
+                try {
+                    const originalHref = link.getAttribute('href');
+                    if (!originalHref) return;
+
+                    // Safely parse the query string without a full URL object
+                    const urlParts = originalHref.split('?');
+                    const path = urlParts[0];
+                    const params = new URLSearchParams(urlParts.length > 1 ? urlParts[1] : '');
+                    
+                    // Set the correct return path
+                    params.set('return_to', currentPagePath);
+                    
+                    // Re-assign the updated href attribute
+                    link.setAttribute('href', `${path}?${params.toString()}`);
+                } catch (e) {
+                    // If this specific link fails, log it and continue
+                    console.error('Failed to update a currency link:', e, link);
                 }
             });
 
         } catch (error) {
-            console.error("Error initializing custom footer:", error);
+            console.error("Error initializing custom footer logic:", error);
         }
     }
 
-    // Since the footer is injected, we can't rely on DOMContentLoaded.
-    // We'll poll the DOM every 100ms until we find the footer container.
-    const footerInitInterval = setInterval(initInjectedFooter, 100);
+    // --- Use a MutationObserver to watch for the footer being injected ---
+    // This is more efficient and reliable than setInterval.
+    const observer = new MutationObserver((mutations, obs) => {
+        const footerElement = document.querySelector('.custom-footer-container-v5');
+        if (footerElement) {
+            // The footer has been found!
+            initializeFooterLogic(); // Run our main function
+            obs.disconnect(); // Stop observing once we've found it
+        }
+    });
+
+    // Start observing the body for added child elements.
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 </script>
