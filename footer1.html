@@ -556,14 +556,15 @@
             const currentPagePath = window.location.pathname + window.location.search;
             
             currencyLinks.forEach(link => {
-                // The URL constructor fails with relative paths. We must provide a base URL.
-                // We use document.baseURI which is the document's own location.
-                const url = new URL(link.getAttribute('href'), document.baseURI);
+                // Using link.href lets the browser create the full, absolute URL, which is
+                // more reliable in sandboxed/injected script environments.
+                const url = new URL(link.href);
                 
                 // Dynamically set the 'return_to' parameter to the current page's path.
                 url.searchParams.set('return_to', currentPagePath);
                 
-                // We set the href to the pathname + search to keep the link relative.
+                // We set the href to the pathname + search to keep the link relative,
+                // which is a best practice and avoids cross-origin issues.
                 link.href = url.pathname + url.search;
             });
         } catch (error) {
