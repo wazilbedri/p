@@ -211,9 +211,9 @@
     position: absolute;
     bottom: 100%; /* Position above button */
     left: 0;
-    background-color: #fff;
+    background-color: #f5f0e9;
     border: 1px solid #dcd1c0;
-    min-width: 100px;
+    /*min-width: 100px;*/
     z-index: 1000;
     margin-bottom: 5px;
   }
@@ -221,7 +221,7 @@
     list-style: none;
     margin: 0;
     padding: 5px;
-    max-height: 200px;
+    max-height: 100px;
     overflow-y: auto;
   }
   .currency-dropdown-unique li {
@@ -235,7 +235,7 @@
     text-decoration: none;
   }
   .currency-dropdown-unique .currency-dropdown-link-unique:hover {
-      background-color: #f0f0f0;
+      background-color: #ffffff;
   }
 
   .footer-copyright-v5 {
@@ -283,7 +283,7 @@
     .footer-copyright-v5 { order: 3; }
     .footer-payment-icons-v5 { order: 2; }
     .currency-container-unique { order: 1; }
-
+    
 
     .newsletter-success-message-v5 {
     color: #555;
@@ -308,6 +308,13 @@
   
   @media (min-width: 768px) {
 
+    .currency-dropdown-unique ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+    max-height: 160px;
+    overflow-y: auto;
+  }
 
     .newsletter-success-message-v5 {
     color: #555;
@@ -387,142 +394,27 @@
     </div>
   </div>
 
-
-
-
-
-
-
   <div class="footer-bottom-v5">
-      
-    <div class="header__icons">
-      <ul class="header__list list list--horizontal">
-        
-
-        
-
-        
-          <li class="header__list-item visible@sm">
-            <a class="header__link header__link--icon" tabindex="0">
-              CAD
-
-              
-                <span class="header__link-icon">
-                  <svg class="svg-fill-current-color" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>Chevron Bottom</title>
-<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" vector-effect="non-scaling-stroke"/>
-</svg>
-
-                </span>
-              
-            </a>
-
-            
-              <div class="header__dropdown header__dropdown--content">
-                <ul class="header__dropdown-inner">
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=USD&return_to=/en-cad">
-                        USD
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=EUR&return_to=/en-cad">
-                        EUR
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=CAD&return_to=/en-cad">
-                        CAD
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=GBP&return_to=/en-cad">
-                        GBP
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=AUD&return_to=/en-cad">
-                        AUD
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=NZD&return_to=/en-cad">
-                        NZD
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=SEK&return_to=/en-cad">
-                        SEK
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=NOK&return_to=/en-cad">
-                        NOK
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=DKK&return_to=/en-cad">
-                        DKK
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=PLN&return_to=/en-cad">
-                        PLN
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=JPY&return_to=/en-cad">
-                        JPY
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=MYR&return_to=/en-cad">
-                        MYR
-                      </a>
-                    </li>
-                  
-                    <li class="header__dropdown-item">
-                      <a class="header__dropdown-link" href="/localization?currency=SGD&return_to=/en-cad">
-                        SGD
-                      </a>
-                    </li>
-                  
-                </ul>
-              </div>
-            
-          </li>
+      <div class="currency-container-unique">
+          <!-- UPDATED: Added onclick attribute -->
+          <button class="currency-button-unique currency-dropdown-trigger" onclick="handleCurrencyToggle('currency-dropdown-v5', this)">
+              <span>USD  ▾</span>
+          </button>
+          <div id="currency-dropdown-v5" class="currency-dropdown-unique">
+              <ul class="currency-dropdown-inner-unique">
+                  <li><a href="/localization?currency=USD&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="USD">USD</a></li>
+                  <li><a href="/localization?currency=EUR&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="EUR">EUR</a></li>
+                  <li><a href="/localization?currency=CAD&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="CAD">CAD</a></li>
+                  <li><a href="/localization?currency=GBP&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="GBP">GBP</a></li>
+                  <li><a href="/localization?currency=AUD&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="AUD">AUD</a></li>
+                  <li><a href="/localization?currency=NZD&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="NZD">NZD</a></li>
+                  <li><a href="/localization?currency=JPY&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="JPY">JPY</a></li>
+                  <li><a href="/localization?currency=SEK&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="SEK">SEK</a></li>
+                  <li><a href="/localization?currency=NOK&return_to=/en-cad" class="currency-dropdown-link-unique" data-currency="NOK">NOK</a></li>
+                
+              </ul>
           </div>
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      </div>
       <div class="footer-copyright-v5">
         &copy; 2025 WarmQuote. All Rights Reserved.
       </div>
@@ -583,7 +475,7 @@
             const currency = this.getAttribute('data-currency');
             const button = this.closest('.currency-container-unique').querySelector('.currency-button-unique span');
             if(button) {
-                button.innerHTML = `🇺🇸 ${currency} $ ▾`;
+                button.innerHTML = ` ${currency} ▾`;
             }
             this.closest('.currency-dropdown-unique').style.display = 'none';
             activeCurrencyDropdownId = null;
@@ -618,3 +510,4 @@
         }
     });
 </script>
+
