@@ -498,37 +498,40 @@
         form.reset();
     };
 
-    // --- Page Load Logic (Footer, Currency Selector) ---
-    document.addEventListener('DOMContentLoaded', function() {
-        // Failsafe to hide the default footer
-        const defaultFooter = document.getElementById('fw-section-footer');
-        if (defaultFooter) {
-            defaultFooter.style.display = 'none';
-        }
-
-        // Helper function to get a cookie by name. Shopify often uses a 'currency' cookie.
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-            return null;
-        }
-
+    // --- Logic to initialize the footer once it's injected into the page ---
+    function initInjectedFooter() {
+        // Find the main container for the currency selector.
+        // If it's not in the DOM yet, exit and wait for the next interval check.
         const currencyContainer = document.querySelector('.currency-container-unique');
         if (!currencyContainer) {
-            // If the currency container doesn't exist on the page, stop the script.
-            return; 
+            return;
         }
 
-        const currencyButtonSpan = currencyContainer.querySelector('.currency-button-unique span');
-        const currencyLinks = currencyContainer.querySelectorAll('.currency-dropdown-link-unique');
-        
-        // --- FIX FOR PROBLEM 2: Update button to show the active currency on page load ---
-        try {
-            // Shopify's active currency can be found in a few places.
-            // We'll check the global Shopify JS object first, then fall back to a 'currency' cookie.
-            let activeCurrency = 'USD'; // Set a default currency.
+        // --- SUCCESS: The footer has been found. ---
+        // 1. Clear the interval so this function doesn't run again.
+        clearInterval(footerInitInterval);
 
+        // 2. Run all the setup logic now.
+        try {
+            // Failsafe to hide the default footer
+            const defaultFooter = document.getElementById('fw-section-footer');
+            if (defaultFooter) {
+                defaultFooter.style.display = 'none';
+            }
+
+            // Helper function to get a cookie by name.
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+
+            const currencyButtonSpan = currencyContainer.querySelector('.currency-button-unique span');
+            const currencyLinks = currencyContainer.querySelectorAll('.currency-dropdown-link-unique');
+
+            // --- FIX FOR PROBLEM 2: Update button to show the active currency on page load ---
+            let activeCurrency = 'USD'; // Default
             if (typeof Shopify !== 'undefined' && Shopify.currency && Shopify.currency.active) {
                 activeCurrency = Shopify.currency.active;
             } else {
@@ -537,38 +540,28 @@
                     activeCurrency = cookieCurrency.toUpperCase();
                 }
             }
-
             if (currencyButtonSpan) {
-                // Update the button text to reflect the active currency.
                 currencyButtonSpan.textContent = `${activeCurrency} ▾`;
             }
-        } catch (error) {
-            console.error("Error setting active currency display:", error);
-            // In case of an error, we ensure the button still has default text.
-            if (currencyButtonSpan) {
-                currencyButtonSpan.textContent = 'USD ▾';
-            }
-        }
 
-        // --- FIX FOR PROBLEM 1: Update currency links to return to the current page ---
-        try {
-            // Get the current page's path, including any query strings.
+            // --- FIX FOR PROBLEM 1: Update currency links to return to the current page ---
             const currentPagePath = window.location.pathname + window.location.search;
-            
             currencyLinks.forEach(link => {
-                // Using link.href lets the browser create the full, absolute URL, which is
-                // more reliable in sandboxed/injected script environments.
-                const url = new URL(link.href);
-                
-                // Dynamically set the 'return_to' parameter to the current page's path.
-                url.searchParams.set('return_to', currentPagePath);
-                
-                // We set the href to the pathname + search to keep the link relative,
-                // which is a best practice and avoids cross-origin issues.
-                link.href = url.pathname + url.search;
+                const currency = link.getAttribute('data-currency');
+                if (currency) {
+                    // Reconstruct the URL safely without relying on new URL() constructor,
+                    // and ensure the path is correctly encoded.
+                    const newHref = `/localization?currency=${currency}&return_to=${encodeURIComponent(currentPagePath)}`;
+                    link.setAttribute('href', newHref);
+                }
             });
+
         } catch (error) {
-            console.error("Error updating currency return_to links:", error);
+            console.error("Error initializing custom footer:", error);
         }
-    });
+    }
+
+    // Since the footer is injected, we can't rely on DOMContentLoaded.
+    // We'll poll the DOM every 100ms until we find the footer container.
+    const footerInitInterval = setInterval(initInjectedFooter, 100);
 </script>
