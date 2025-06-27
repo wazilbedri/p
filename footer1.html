@@ -556,11 +556,15 @@
             const currentPagePath = window.location.pathname + window.location.search;
             
             currencyLinks.forEach(link => {
-                // Use the URL API for robust and safe parameter manipulation.
-                const url = new URL(link.href);
+                // The URL constructor fails with relative paths. We must provide a base URL.
+                // We use document.baseURI which is the document's own location.
+                const url = new URL(link.getAttribute('href'), document.baseURI);
+                
                 // Dynamically set the 'return_to' parameter to the current page's path.
                 url.searchParams.set('return_to', currentPagePath);
-                link.href = url.toString();
+                
+                // We set the href to the pathname + search to keep the link relative.
+                link.href = url.pathname + url.search;
             });
         } catch (error) {
             console.error("Error updating currency return_to links:", error);
