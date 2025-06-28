@@ -4,7 +4,7 @@
     display: none !important;
   }
 
-  /* --- STICKY FOOTER LAYOUT (THE CSS FIX) --- */
+  /* --- STICKY FOOTER LAYOUT --- */
   html, body {
     height: 100%;
   }
@@ -22,8 +22,8 @@
 
   /* --- STYLING FOR THE NEW FOOTER DESIGN --- */
   .custom-footer-container-v5 {
-    background-color: #f5f0e9; /* Light beige background */
-    color: #333; /* Dark text color */
+    background-color: #f5f0e9;
+    color: #333;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 60px 5% 30px 5%;
     width: 100%;
@@ -32,15 +32,59 @@
   }
 
   .custom-footer-grid-v5 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
     padding-bottom: 50px;
-    border-bottom: 1px solid #dcd1c0; /* Light border color */
+    border-bottom: 1px solid #dcd1c0;
   }
 
+  /* --- MOBILE-FIRST STYLES (Default) --- */
+  .custom-footer-grid-v5 {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column by default for mobile */
+    gap: 40px;
+  }
+
+  .footer-bottom-v5 {
+    display: flex;
+    flex-direction: column; /* Stack items vertically on mobile */
+    align-items: center; /* Center them */
+    gap: 20px;
+    padding-top: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-copyright-v5 { order: 3; }
+  .footer-payment-icons-v5 { order: 2; }
+  .currency-container-unique { order: 1; }
+  
+  /* Make sure currency selector is visible on mobile if it exists */
+  .currency-container-unique {
+    display: block; 
+  }
+
+  /* --- TABLET & DESKTOP STYLES (The fix for responsive layout) --- */
+  @media (min-width: 768px) {
+    .custom-footer-grid-v5 {
+      grid-template-columns: repeat(4, 1fr); /* 4-column grid for tablets and up */
+      gap: 40px; /* Adjust gap for wider screens */
+    }
+
+    .footer-bottom-v5 {
+      flex-direction: row; /* Horizontal layout for bottom bar */
+      justify-content: space-between; /* Space items out */
+      align-items: center;
+    }
+
+    /* Reset mobile ordering for larger screens */
+    .footer-copyright-v5 { order: initial; }
+    .footer-payment-icons-v5 { order: initial; }
+    .currency-container-unique { order: initial; }
+  }
+
+
+  /* --- GENERAL COLUMN & TEXT STYLING (Largely Unchanged) --- */
   .footer-column-v5 .column-title-v5 {
     font-weight: 600;
     font-size: 0.9rem;
@@ -50,14 +94,7 @@
     text-transform: uppercase;
   }
   
-  .footer-column-v5 p.about-text {
-      font-size: 0.9rem;
-      color: #555;
-      line-height: 1.6;
-      margin: 0 0 25px 0;
-  }
-  
-  .footer-column-v5 p.newsletter-text {
+  .footer-column-v5 p {
       font-size: 0.9rem;
       color: #555;
       line-height: 1.6;
@@ -88,35 +125,49 @@
     padding-bottom: 5px; 
   }
 
-  /* UPDATED: Removed the animation property, leaving only the color change */
   .footer-column-v5 ul li a:hover {
     color: #000;
   }
 
-  /* UPDATED: This now uses transform:scaleX() for the animation */
   .footer-column-v5 ul li a::after {
     content: '';
     position: absolute;
-    width: 100%; /* Line is always 100% width */
+    width: 100%;
     height: 1px;
     background-color: #000;
     bottom: 0;
     left: 0;
-    transform: scaleX(0); /* Initially scaled to be invisible */
-    transform-origin: right; /* Set the origin to the right for the "un-hover" animation */
-    transition: transform 0.4s ease-in-out; /* Animate the transform property */
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease-in-out;
   }
 
-  /* UPDATED: On hover, we change the transform-origin and scale it to full size */
   .footer-column-v5 ul li a:hover::after {
-    transform: scaleX(1); /* Scale to full width on hover */
-    transform-origin: left; /* Set the origin to the left for the "hover" animation */
+    transform: scaleX(1);
+    transform-origin: left;
   }
   
-  /* REMOVED: The entire @keyframes glitch block has been deleted */
-
   .footer-logo-v5 {
       width: 80px;
+  }
+  
+  /* Re-ordering logo for different views */
+  @media (max-width: 767px) {
+    .footer-logo-v5 { 
+        order: 1; 
+        margin-bottom: 25px;
+    }
+    .about-us-column .column-title-v5 { order: 2; }
+    .about-us-column .about-text { order: 3; }
+  }
+  @media (min-width: 768px) {
+    .footer-logo-v5 { 
+        order: 3; 
+        margin-top: 25px; 
+        margin-bottom: 0;
+    }
+    .about-us-column .column-title-v5 { order: 1; }
+    .about-us-column .about-text { order: 2; }
   }
   
   .footer-logo-v5 img {
@@ -133,10 +184,8 @@
       font-size: 1.2rem;
   }
   
-  .newsletter-form-v5 {
-    width: 100%;
-  }
-
+  /* --- NEWSLETTER AND FORM STYLING (Unchanged) --- */
+  .newsletter-form-v5 { width: 100%; }
   .newsletter-input-v5 {
     border: none;
     border-bottom: 1px solid #333;
@@ -148,10 +197,7 @@
     width: 100%;
     box-sizing: border-box;
   }
-  .newsletter-input-v5::placeholder {
-      color: #777;
-  }
-
+  .newsletter-input-v5::placeholder { color: #777; }
   .newsletter-button-v5 {
     background-color: #212121;
     color: #fff;
@@ -166,42 +212,24 @@
     width: 100%;
     margin-top: 20px;
   }
-  .newsletter-button-v5:hover {
-      background-color: #000;
-  }
-  
-  
+  .newsletter-button-v5:hover { background-color: #000; }
   .captcha-notice-v5 {
       font-size: 0.8rem;
       font-style: italic;
       color: #6a6a6a;
       margin-top: 15px;
       line-height: 1.5;
-      margin-bottom: -11;
   }
-  .captcha-notice-v5 a {
-      color: inherit;
-      text-decoration: underline;
-  }
-  
-  .footer-bottom-v5 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding-top: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .currency-container-unique {
-    display: none;
+  .captcha-notice-v5 a { color: inherit; text-decoration: underline; }
+  .newsletter-success-message-v5 {
+    color: #555;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    text-align: center;
   }
   
-  .currency-container-unique {
-    position: relative;
-  }
+  /* --- CURRENCY SELECTOR STYLING (Unchanged) --- */
+  .currency-container-unique { position: relative; }
   .currency-button-unique {
     border: 1px solid #dcd1c0;
     padding: 8px 12px;
@@ -213,11 +241,10 @@
   .currency-dropdown-unique {
     display: none;
     position: absolute;
-    bottom: 100%; /* Position above button */
+    bottom: 100%;
     left: 0;
     background-color: #fff;
     border: 1px solid #dcd1c0;
-    /*min-width: 100px;*/
     z-index: 1000;
     margin-bottom: 5px;
   }
@@ -225,13 +252,10 @@
     list-style: none;
     margin: 0;
     padding: 5px;
-    max-height: 100px;
+    max-height: 150px;
     overflow-y: auto;
   }
-  .currency-dropdown-unique li {
-    padding: 0;
-    margin: 0;
-  }
+  .currency-dropdown-unique li { padding: 0; margin: 0; }
   .currency-dropdown-unique .currency-dropdown-link-unique {
     display: block;
     padding: 8px 12px;
@@ -242,109 +266,11 @@
       background-color: #f0f0f0;
   }
 
-  .footer-copyright-v5 {
-    font-size: 0.8rem;
-    color: #555;
-  }
+  /* --- BOTTOM BAR STYLING (Unchanged) --- */
+  .footer-copyright-v5 { font-size: 0.8rem; color: #555; }
+  .footer-payment-icons-v5 { display: flex; flex-wrap: wrap; gap: 8px; }
+  .footer-payment-icons-v5 img { height: 24px; }
   
-  .footer-payment-icons-v5 {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-  }
-  
-  .footer-payment-icons-v5 img {
-      height: 24px;
-  }
-
-  .visually-hidden {
-      position: absolute;
-      width: 1px; height: 1px; padding: 0; margin: -1px;
-      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
-  }
-
-  
-
-  @media (max-width: 767px) {
-    .custom-footer-grid-v5 {
-        grid-template-columns: 1fr; 
-    }
-    .footer-column-v5.about-us-column {
-        align-items: flex-start;
-    }
-    .footer-column-v5 ul {
-        margin-bottom: 20px;
-    }
-    .footer-bottom-v5 {
-      flex-direction: column;
-      border-top: 1px solid #dcd1c0;
-      margin-bottom: 0;
-    }
-    .footer-copyright-v5 { order: 3; }
-    .footer-payment-icons-v5 { order: 2; }
-    .currency-container-unique { order: 1; }
-    
-
-    .newsletter-success-message-v5 {
-    color: #555;
-    margin-top: 50px;
-    font-size: 0.9rem;
-    text-align: center;
-   }
-    
-    .footer-logo-v5 {
-        order: 1;
-        margin-bottom: 25px;
-        margin-top: 0;
-    }
-    .about-us-column .column-title-v5 {
-        order: 2;
-    }
-    .about-us-column .about-text {
-        order: 3;
-    }
-    
-  }
-  
-  @media (min-width: 768px) {
-
-    @media (max-width: 767px) {
-  .currency-container-unique {
-    display: block;
-  }
-}
-
-    .currency-dropdown-unique ul {
-    list-style: none;
-    margin: 0;
-    padding: 5px;
-    max-height: 150px;
-    overflow-y: auto;
-  }
-
-    .newsletter-success-message-v5 {
-    color: #555;
-    margin-top: 20px;
-    font-size: 0.9rem;
-    text-align: center;
-   }
-    .footer-logo-v5 {
-        order: 3;
-        margin-top: 25px;
-        margin-bottom: 0;
-    }
-    .about-us-column .column-title-v5 {
-        order: 1;
-    }
-    .about-us-column .about-text {
-        order: 2;
-    }
-  }
-  @media (max-width: 692px) {
-  .currency-container-unique {
-    display: block;
-  }
-}
 </style>
 
 <!-- Step 2: The HTML for the new footer design -->
