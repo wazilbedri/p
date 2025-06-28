@@ -405,9 +405,9 @@
     </div>
   </div>
 
-  <div class="footer-bottom-v5">
-      <div class="currency-container-unique">
-          <!-- UPDATED: Added onclick attribute -->
+   <div class="footer-bottom-v5">
+      <!--<div class="currency-container-unique">
+         
           <button class="currency-button-unique currency-dropdown-trigger" onclick="handleCurrencyToggle('currency-dropdown-v5', this)">
               <span>USD  ▾</span>
           </button>
@@ -425,7 +425,8 @@
                 
               </ul>
           </div>
-      </div>
+      </div> -->
+
       <div class="footer-copyright-v5">
         &copy; 2025 WarmQuote. All Rights Reserved.
       </div>
@@ -498,31 +499,37 @@
         form.reset();
     };
 
-    // --- Core logic to initialize the footer once it's injected ---
-    function initializeFooterLogic() {
+    // --- Page Load Logic (Footer, Currency Selector) ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // Failsafe to hide the default footer
+        const defaultFooter = document.getElementById('fw-section-footer');
+        if (defaultFooter) {
+            defaultFooter.style.display = 'none';
+        }
+
+        // Helper function to get a cookie by name. Shopify often uses a 'currency' cookie.
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        const currencyContainer = document.querySelector('.currency-container-unique');
+        if (!currencyContainer) {
+            // If the currency container doesn't exist on the page, stop the script.
+            return; 
+        }
+
+        const currencyButtonSpan = currencyContainer.querySelector('.currency-button-unique span');
+        const currencyLinks = currencyContainer.querySelectorAll('.currency-dropdown-link-unique');
+        
+        // --- FIX FOR PROBLEM 2: Update button to show the active currency on page load ---
         try {
-            const currencyContainer = document.querySelector('.currency-container-unique');
-            if (!currencyContainer) return;
+            // Shopify's active currency can be found in a few places.
+            // We'll check the global Shopify JS object first, then fall back to a 'currency' cookie.
+            let activeCurrency = 'USD'; // Set a default currency.
 
-            // Failsafe to hide the default footer
-            const defaultFooter = document.getElementById('fw-section-footer');
-            if (defaultFooter) {
-                defaultFooter.style.display = 'none';
-            }
-
-            // Helper function to get a cookie by name.
-            function getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop().split(';').shift();
-                return null;
-            }
-
-            const currencyButtonSpan = currencyContainer.querySelector('.currency-button-unique span');
-            const currencyLinks = currencyContainer.querySelectorAll('.currency-dropdown-link-unique');
-
-            // --- FIX 2: Update button to show the active currency ---
-            let activeCurrency = 'USD'; // Default
             if (typeof Shopify !== 'undefined' && Shopify.currency && Shopify.currency.active) {
                 activeCurrency = Shopify.currency.active;
             } else {
@@ -531,52 +538,38 @@
                     activeCurrency = cookieCurrency.toUpperCase();
                 }
             }
+
             if (currencyButtonSpan) {
+                // Update the button text to reflect the active currency.
                 currencyButtonSpan.textContent = `${activeCurrency} ▾`;
             }
-
-            // --- FIX 1: Update currency links to return to the current page ---
-            const currentPagePath = window.location.pathname + window.location.search;
-            currencyLinks.forEach(link => {
-                try {
-                    const originalHref = link.getAttribute('href');
-                    if (!originalHref) return;
-
-                    // Safely parse the query string without a full URL object
-                    const urlParts = originalHref.split('?');
-                    const path = urlParts[0];
-                    const params = new URLSearchParams(urlParts.length > 1 ? urlParts[1] : '');
-                    
-                    // Set the correct return path
-                    params.set('return_to', currentPagePath);
-                    
-                    // Re-assign the updated href attribute
-                    link.setAttribute('href', `${path}?${params.toString()}`);
-                } catch (e) {
-                    // If this specific link fails, log it and continue
-                    console.error('Failed to update a currency link:', e, link);
-                }
-            });
-
         } catch (error) {
-            console.error("Error initializing custom footer logic:", error);
+            console.error("Error setting active currency display:", error);
+            // In case of an error, we ensure the button still has default text.
+            if (currencyButtonSpan) {
+                currencyButtonSpan.textContent = 'USD ▾';
+            }
         }
-    }
 
-    // --- Use a MutationObserver to watch for the footer being injected ---
-    // This is more efficient and reliable than setInterval.
-    const observer = new MutationObserver((mutations, obs) => {
-        const footerElement = document.querySelector('.custom-footer-container-v5');
-        if (footerElement) {
-            // The footer has been found!
-            initializeFooterLogic(); // Run our main function
-            obs.disconnect(); // Stop observing once we've found it
+        // --- FIX FOR PROBLEM 1: Update currency links to return to the current page ---
+        try {
+            // Get the current page's path, including any query strings.
+            const currentPagePath = window.location.pathname + window.location.search;
+            
+            currencyLinks.forEach(link => {
+                // Using link.href lets the browser create the full, absolute URL, which is
+                // more reliable in sandboxed/injected script environments.
+                const url = new URL(link.href);
+                
+                // Dynamically set the 'return_to' parameter to the current page's path.
+                url.searchParams.set('return_to', currentPagePath);
+                
+                // We set the href to the pathname + search to keep the link relative,
+                // which is a best practice and avoids cross-origin issues.
+                link.href = url.pathname + url.search;
+            });
+        } catch (error) {
+            console.error("Error updating currency return_to links:", error);
         }
-    });
-
-    // Start observing the body for added child elements.
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
     });
 </script>
