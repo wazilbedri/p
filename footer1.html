@@ -146,6 +146,33 @@
     transform: scaleX(1);
     transform-origin: left;
   }
+  /* --- UPDATED CSS FOR PRIVACY CHOICES BUTTON --- */
+.footer-column-v5 ul li .cc-link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  /* New styles for alignment */
+  display: flex;
+  align-items: center;
+}
+
+.footer-column-v5 ul li .cc-link:hover {
+  color: #000;
+}
+
+/* Style for the new icon */
+.privacy-choice-icon {
+  height: 12px; /* This makes the icon scale with the text size */
+  width: auto;
+  margin-right: 8px; /* Adds a nice space between the icon and text */
+}
+  
   
   .footer-logo-v5 {
       width: 80px;
@@ -300,12 +327,14 @@
       <h3 class="column-title-v5">Policies</h3>
       <ul>
         <li><a href="/pages/privacy-policy">Privacy Policy</a></li>
-        <li><a href="/pages/returns-faq">Returns & FAQ</a></li>
         <li><a href="/pages/terms-of-service">Terms of Service</a></li>
-        <button type="button" data-cc="c-settings" class="cc-link" aria-haspopup="dialog">Manage preferences</button>
-        
-        
-        
+        <li><a href="/pages/returns-faq">Returns & FAQ</a></li>
+        <li>
+          <button type="button" data-cc="c-settings" class="cc-link" aria-haspopup="dialog">
+            <img src="https://raw.githubusercontent.com/wazilbedri/w/main/icon20.svg" alt="Privacy choices icon" class="privacy-choice-icon">
+            <span>Your Privacy Choices</span>
+          </button>
+        </li>
       </ul>
     </div>
 
